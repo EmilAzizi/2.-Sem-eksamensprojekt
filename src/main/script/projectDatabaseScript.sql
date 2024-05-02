@@ -22,3 +22,8 @@ CREATE TABLE IF NOT EXISTS projectmanagemement (
     FOREIGN KEY (labelID) REFERENCES label(labelID),
     FOREIGN KEY (contributersID) REFERENCES contributer(contributerID)
 );
+
+CREATE TABLE IF NOT EXISTS users(
+    userID INT AUTO_INCREMENT PRIMARY KEY,
+    userName varchar(255)
+);
