@@ -103,16 +103,17 @@ public class projectController {
     public String editLabel() {
         // Edit task logic
         return "redirect:/";
-      
+    }
+
     @GetMapping("/createUser")
-    public String createUser(Model model){
+    public String createUser (Model model){
         User newUser = new User();
         model.addAttribute("newUser", newUser);
         return "createUser";
     }
 
     @PostMapping("/createUser")
-    public String createNewUser(@ModelAttribute User user) throws SQLException {
+    public String createNewUser (@ModelAttribute User user) throws SQLException {
         PS.createUser(user);
         return "redirect:/projectManagement";
     }
