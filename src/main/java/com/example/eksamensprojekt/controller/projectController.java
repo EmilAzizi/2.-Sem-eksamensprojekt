@@ -13,4 +13,9 @@ public class projectController {
     public String start(Model model){
         return "startPage";
     }
+
+    @GetMapping("/project")
+    public String projectSelectionPage(Model model){
+        return "projectSelectionPage";
+    }
 }
