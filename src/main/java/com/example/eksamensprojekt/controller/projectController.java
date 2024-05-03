@@ -16,4 +16,9 @@ public class projectController {
         model.addAttribute("userList", PS.getUserList());
         return "startPage";
     }
+
+    @GetMapping("/project")
+    public String projectSelectionPage(Model model){
+        return "projectSelectionPage";
+    }
 }

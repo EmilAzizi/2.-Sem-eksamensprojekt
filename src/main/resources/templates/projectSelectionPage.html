@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Project Management Dashboard</title>
+  <link rel="stylesheet" href="projectSelectionPage.css">
+</head>
+<body>
+<div class="main-container">
+  <h1>Project Management Dashboard</h1>
+  <div class="buttons">
+    <button th:onclick="'createNewProject();'">Create New Project</button>
+    <button th:onclick="'selectProject();'">Select Project</button>
+    <button th:onclick="'deleteProject();'">Delete Project</button>
+  </div>
+</div>
+</body>
+</html>
