@@ -7,18 +7,18 @@
 </head>
 <body>
 <div class="login-container">
-  <form th:action="@{/login}" method="post" class="login-form">
+  <form action="/loginPage" method="get" class="login-form" th:object="${userToBeCompared}">
     <h2>Login</h2>
 
     <p th:if="${loginError}" th:text="${errorMessage}" class="error"></p>
 
     <div class="input-group">
       <label for="username">Username</label>
-      <input type="text" id="username" name="username" th:value="*{username}" required>
+      <input type="text" id="username" name="username" th:value="*{userName}" required>
     </div>
     <div class="input-group">
       <label for="password">Password</label>
-      <input type="password" id="password" name="password" th:value="*{password}" required>
+      <input type="password" id="password" name="password" th:value="*{userPassword}" required>
     </div>
     <button type="submit">Login</button>
   </form>

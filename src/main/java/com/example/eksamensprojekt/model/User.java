@@ -2,8 +2,8 @@ package com.example.eksamensprojekt.model;
 
 public class User {
     private int userID = 0;
-    private String userName;
-    private String userPassword;
+     String userName;
+     String userPassword;
     private int projectID = 0;
 
     public void setUserID(int userID) {

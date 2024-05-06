@@ -37,15 +37,15 @@ public class projectRepository {
         }
     }
 
-    public User authenticateUser(User userToBeComparedTo) throws SQLException {
+    public Boolean authenticateUser(User userToBeComparedTo) throws SQLException {
+        boolean isAuthenticated = false;
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
-            boolean isAuthenticated = false;
             for(User user : userList) {
                 if (userToBeComparedTo.getUserName().equals(user.getUserName()) && userToBeComparedTo.getUserPassword().equals(user.getUserPassword())) {
                     isAuthenticated = true;
                 }
             }
         }
-        return userToBeComparedTo;
+        return isAuthenticated;
     }
 }
