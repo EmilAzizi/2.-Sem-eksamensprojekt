@@ -121,13 +121,13 @@ public class projectController {
         return "loginPage";
     }
 
-    @PostMapping("/loginPage")
+    @PostMapping("/userLogin")
     public String loginPageRedirect(@ModelAttribute User userToBeComparedTo) throws SQLException {
         Boolean isAuthenticated = PS.authenticateUser(userToBeComparedTo);
         if(isAuthenticated){
             return "login";
         } else {
-            return "redirect:projectManagement/loginPage";
+            return "redirect:/loginPage";
         }
     }
 }
