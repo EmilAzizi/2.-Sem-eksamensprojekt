@@ -17,4 +17,8 @@ public class projectService {
     public void createUser(User newUser) throws SQLException {
         PR.createUser(newUser);
     }
+
+    public User authenticateUser(User userToBeComparedTo) throws SQLException {
+        return PR.authenticateUser(userToBeComparedTo);
+    }
 }

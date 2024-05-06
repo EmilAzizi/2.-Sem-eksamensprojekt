@@ -4,11 +4,7 @@ import com.example.eksamensprojekt.model.User;
 import com.example.eksamensprojekt.service.projectService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 
@@ -106,15 +102,28 @@ public class projectController {
     }
 
     @GetMapping("/createUser")
-    public String createUser (Model model){
+    public String createUser(Model model) {
         User newUser = new User();
         model.addAttribute("newUser", newUser);
         return "createUser";
     }
 
     @PostMapping("/createUser")
-    public String createNewUser (@ModelAttribute User user) throws SQLException {
+    public String createNewUser(@ModelAttribute User user) throws SQLException {
         PS.createUser(user);
         return "redirect:/projectManagement";
+    }
+
+    @GetMapping("/loginPage")
+    public String loginPage(Model model) {
+        User userToBeComparedTo = new User();
+        model.addAttribute("userToBeCompared", userToBeComparedTo);
+        return "loginPage";
+    }
+
+    @PostMapping("/loginPage")
+    public String loginPageRedirect(@ModelAttribute User userToBeComparedTo) throws SQLException {
+        PS.authenticateUser(userToBeComparedTo);
+        return "login";
     }
 }
