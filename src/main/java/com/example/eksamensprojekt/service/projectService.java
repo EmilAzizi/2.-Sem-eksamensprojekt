@@ -9,8 +9,8 @@ import java.util.List;
 
 @Service
 public class projectService {
-    projectRepository PR = new projectRepository();
-    public List<User> getUserList(){
+    static projectRepository PR = new projectRepository();
+    public List<User> getUserList() throws SQLException{
         return PR.getUserList();
     }
 
@@ -19,7 +19,7 @@ public class projectService {
     }
 
 
-    public Boolean authenticateUser(User userToBeComparedTo) throws SQLException {
+    public static boolean authenticateUser(User userToBeComparedTo) throws SQLException {
         return PR.authenticateUser(userToBeComparedTo);
     }
 }

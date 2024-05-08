@@ -1,4 +1,5 @@
 package com.example.eksamensprojekt.repository;
+
 import com.example.eksamensprojekt.model.Category;
 import com.example.eksamensprojekt.model.Project;
 import com.example.eksamensprojekt.model.User;
@@ -22,12 +23,15 @@ public class projectRepository {
         category = new Category();
     }
 
-    public List<User> getUserList() {
+    public List<User> getUserList() throws SQLException{
+        if (userList.isEmpty()) {
+            userList = getUsers();
+        }
         return userList;
     }
 
     public void createUser(User newUser) throws SQLException {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "marksej123")) {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO users (userName, userPassword)" +
                     "VALUES(?,?);");
             ps.setString(1, newUser.getUserName());
@@ -37,15 +41,29 @@ public class projectRepository {
         }
     }
 
-    public Boolean authenticateUser(User userToBeComparedTo) throws SQLException {
-        boolean isAuthenticated = false;
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
-            for(User user : userList) {
-                if (userToBeComparedTo.getUserName().equals(user.getUserName()) && userToBeComparedTo.getUserPassword().equals(user.getUserPassword())) {
-                    isAuthenticated = true;
-                }
+
+
+    public List<User> getUsers() throws SQLException {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "marksej123")) {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM users");
+            ResultSet resultSet = ps.executeQuery();
+            User user;
+            while (resultSet.next()) {
+                user = new User();
+                user.setUserName(resultSet.getString(2));
+                userList.add(user);
             }
+            return userList;
         }
-        return isAuthenticated;
+    }
+
+    public boolean authenticateUser(User userToBeComparedTo) throws SQLException {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "marksej123")) {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM users WHERE userName = ? AND userPassword = ?");
+            ps.setString(1, userToBeComparedTo.getUserName());
+            ps.setString(2, userToBeComparedTo.getUserPassword());
+            ResultSet rs = ps.executeQuery();
+            return rs.next(); // If a row exists, then the user is authenticated
+        }
     }
 }
