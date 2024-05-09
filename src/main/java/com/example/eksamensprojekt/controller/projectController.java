@@ -114,20 +114,21 @@ public class projectController {
         return "redirect:/projectManagement";
     }
 
-    @GetMapping("/loginPage")
-    public String loginPage(Model model) {
+    @GetMapping("{ID}/loginPage")
+    public String loginPage(Model model, @PathVariable int ID) {
         User userToBeComparedTo = new User();
         model.addAttribute("userToBeCompared", userToBeComparedTo);
+        model.addAttribute("userID", ID);
         return "loginPage";
     }
 
-    @PostMapping("/userLogin")
-    public String loginPageRedirect(@ModelAttribute User userToBeComparedTo) throws SQLException {
-        Boolean isAuthenticated = PS.authenticateUser(userToBeComparedTo);
+    @PostMapping("{ID}/loginPage")
+    public String loginPageRedirect(@ModelAttribute User userToBeComparedTo, @PathVariable int ID) throws SQLException {
+        Boolean isAuthenticated = PS.authenticateUser(userToBeComparedTo, ID);
         if(isAuthenticated){
             return "login";
         } else {
-            return "redirect:/loginPage";
+            return "redirect:/projectManagement/" + ID + "/loginPage";
         }
     }
 }

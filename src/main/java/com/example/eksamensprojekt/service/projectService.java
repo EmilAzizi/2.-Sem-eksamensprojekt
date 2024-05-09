@@ -19,7 +19,7 @@ public class projectService {
     }
 
 
-    public Boolean authenticateUser(User userToBeComparedTo) throws SQLException {
-        return PR.authenticateUser(userToBeComparedTo);
+    public Boolean authenticateUser(User userToBeComparedTo, int ID) throws SQLException {
+        return PR.authenticateUser(userToBeComparedTo, ID);
     }
 }

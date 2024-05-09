@@ -1,7 +1,7 @@
 package com.example.eksamensprojekt.model;
 
 public class User {
-    private int userID = 0;
+     int userID = 0;
      String userName;
      String userPassword;
     private int projectID = 0;
@@ -36,5 +36,15 @@ public class User {
 
     public String getUserPassword() {
         return userPassword;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userID=" + userID +
+                ", userName='" + userName + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", projectID=" + projectID +
+                '}';
     }
 }

@@ -26,22 +26,47 @@ public class projectRepository {
         return userList;
     }
 
-    public void createUser(User newUser) throws SQLException {
+    public void insertUser(User newUser) throws SQLException {
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO users (userName, userPassword)" +
                     "VALUES(?,?);");
             ps.setString(1, newUser.getUserName());
             ps.setString(2, newUser.getUserPassword());
             ps.executeUpdate();
-            userList.add(newUser);
         }
     }
 
-    public Boolean authenticateUser(User userToBeComparedTo) throws SQLException {
+    public void createUser(User newUser) throws SQLException {
+        insertUser(newUser);
+        User userToBeCreated = newUser;
+        try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")){
+            Statement statement = connection.createStatement();
+            String selectSQL = "SELECT * FROM users";
+            ResultSet resultSet = statement.executeQuery(selectSQL);
+            while(resultSet.next()){
+                int ID = resultSet.getInt("userID");
+                String name = resultSet.getString("userName");
+                String password = resultSet.getString("userPassword");
+                int projectID = resultSet.getInt("projectID");
+
+                userToBeCreated.setUserID(ID);
+                userToBeCreated.setUserName(name);
+                userToBeCreated.setUserPassword(password);
+                userToBeCreated.setProjectID(projectID);
+            }
+        }
+            userList.add(userToBeCreated);
+            for(User user : userList){
+                System.out.println(user.toString());
+            }
+    }
+
+    public Boolean authenticateUser(User userToBeComparedTo, int ID) throws SQLException {
         boolean isAuthenticated = false;
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
             for(User user : userList) {
-                if (userToBeComparedTo.getUserName().equals(user.getUserName()) && userToBeComparedTo.getUserPassword().equals(user.getUserPassword())) {
+                if (userToBeComparedTo.getUserName().equals(user.getUserName())
+                        && userToBeComparedTo.getUserPassword().equals(user.getUserPassword())) {
                     isAuthenticated = true;
                 }
             }

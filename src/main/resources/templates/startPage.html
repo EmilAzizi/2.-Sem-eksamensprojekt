@@ -11,7 +11,7 @@
 <ul>
 <li th:each="user : ${userList}">
   <p th:text="'User name: ' + ${user.getUserName()}"></p>
-  <form action="/projectManagement/loginPage" method="get">
+  <form th:action="'/projectManagement/'+ ${user.getUserID()} + '/loginPage'" method="get">
     <button type="submit">Login</button>
   </form>
 </li>
