@@ -1,4 +1,5 @@
 package com.example.eksamensprojekt.repository;
+
 import com.example.eksamensprojekt.model.Category;
 import com.example.eksamensprojekt.model.Project;
 import com.example.eksamensprojekt.model.User;
@@ -22,7 +23,10 @@ public class projectRepository {
         category = new Category();
     }
 
-    public List<User> getUserList() {
+    public List<User> getUserList() throws SQLException{
+        if (userList.isEmpty()) {
+            userList = getUsers();
+        }
         return userList;
     }
 
@@ -36,6 +40,23 @@ public class projectRepository {
         }
     }
 
+
+
+    public List<User> getUsers() throws SQLException {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "marksej123")) {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM users");
+            ResultSet resultSet = ps.executeQuery();
+            User user;
+            while (resultSet.next()) {
+                user = new User();
+                user.setUserID(resultSet.getInt(1));
+                user.setUserName(resultSet.getString(2));
+                user.setUserPassword(resultSet.getString(3));
+                user.setProjectID(resultSet.getInt(4));
+                userList.add(user);
+        }
+          return userList;
+    }
     public void createUser(User newUser) throws SQLException {
         insertUser(newUser);
         User userToBeCreated = newUser;
@@ -70,7 +91,14 @@ public class projectRepository {
                     isAuthenticated = true;
                 }
             }
+
+    public boolean authenticateUser(User userToBeComparedTo) throws SQLException {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "marksej123")) {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM users WHERE userName = ? AND userPassword = ?");
+            ps.setString(1, userToBeComparedTo.getUserName());
+            ps.setString(2, userToBeComparedTo.getUserPassword());
+            ResultSet rs = ps.executeQuery();
+            return rs.next(); // If a row exists, then the user is authenticated
         }
-        return isAuthenticated;
     }
 }

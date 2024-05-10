@@ -9,16 +9,15 @@ import java.util.List;
 
 @Service
 public class projectService {
-    projectRepository PR = new projectRepository();
-    public List<User> getUserList(){
+    static projectRepository PR = new projectRepository();
+    public List<User> getUserList() throws SQLException{
         return PR.getUserList();
     }
 
     public void createUser(User newUser) throws SQLException {
         PR.createUser(newUser);
     }
-
-
+  
     public Boolean authenticateUser(User userToBeComparedTo, int ID) throws SQLException {
         return PR.authenticateUser(userToBeComparedTo, ID);
     }

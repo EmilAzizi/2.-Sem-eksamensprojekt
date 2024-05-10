@@ -5,6 +5,7 @@ import com.example.eksamensprojekt.service.projectService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLException;
 
@@ -14,7 +15,7 @@ public class projectController {
     projectService PS = new projectService();
 
     @GetMapping("")
-    public String start(Model model) {
+    public String start(Model model) throws SQLException {
         model.addAttribute("userList", PS.getUserList());
         return "startPage";
     }
