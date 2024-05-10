@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete user</title>
+    <link rel="stylesheet" href="@{/login.css}">
+</head>
+<body>
+
+
+
+
+<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<form action="/projectManagement/deleteUser" method="post" th:object="${userToComparePassword}">
+    <label for="password">Write your password</label>
+    <input type="text" id="password" name="password" required th:field="*{userPassword}">
+    <button type="submit">Delete</button>
+</form>
+
+
+
+
+
+
+
+</body>
+</html>

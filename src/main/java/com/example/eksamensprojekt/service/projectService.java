@@ -21,4 +21,8 @@ public class projectService {
     public Boolean authenticateUser(User userToBeComparedTo, int ID) throws SQLException {
         return PR.authenticateUser(userToBeComparedTo, ID);
     }
+
+    public boolean deleteUser(User userToComparePassword) throws SQLException {
+      return PR.deleteUser(userToComparePassword);
+    }
 }
