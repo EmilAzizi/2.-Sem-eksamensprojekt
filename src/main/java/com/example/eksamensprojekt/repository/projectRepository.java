@@ -94,25 +94,15 @@ public class projectRepository {
             }
         }
 
-        public boolean authenticateUser (User userToBeComparedTo) throws SQLException {
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
-                PreparedStatement ps = connection.prepareStatement("SELECT * FROM users WHERE userName = ? AND userPassword = ?");
-                ps.setString(1, userToBeComparedTo.getUserName());
-                ps.setString(2, userToBeComparedTo.getUserPassword());
-                ResultSet rs = ps.executeQuery();
-                return rs.next(); // If a row exists, then the user is authenticated
-            }
-        }
-
-
-        public boolean deleteUser (User userToComparePassword, int ID) throws SQLException {
+        public boolean deleteUser (User userToCompare, int ID) throws SQLException {
             User userToBeDeleted = null;
             for (User ul : userList) {
                 if(ul.getUserID() == ID){
-                    if (userToComparePassword.getUserPassword().equals(ul.getUserPassword())) {
+                    if (userToCompare.getUserPassword().equals(ul.getUserPassword())) {
                         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
-                            PreparedStatement ps = connection.prepareStatement("DELETE FROM users WHERE userPassword = ?;");
-                            ps.setString(1, userToComparePassword.getUserPassword());
+                            PreparedStatement ps = connection.prepareStatement("DELETE FROM users WHERE userPassword = ? AND userName = ?;");
+                            ps.setString(1, userToCompare.getUserPassword());
+                            ps.setString(1, userToCompare.getUserName());
                             ps.executeUpdate();
                             userToBeDeleted = ul;
                         }

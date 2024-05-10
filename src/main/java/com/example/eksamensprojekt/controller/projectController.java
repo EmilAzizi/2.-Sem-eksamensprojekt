@@ -142,8 +142,8 @@ public class projectController {
     }
 
     @PostMapping("/{ID}/deleteUser")
-    public String deleteUser (@ModelAttribute User userToComparePassword, Model model, @PathVariable int ID) throws SQLException {
-        boolean isDeleted = PS.deleteUser(userToComparePassword, ID);
+    public String deleteUser (@ModelAttribute User userToCompare, Model model, @PathVariable int ID) throws SQLException {
+        boolean isDeleted = PS.deleteUser(userToCompare, ID);
         if (!isDeleted) {
             model.addAttribute("errorMessage", "Wrong password, the user was not deleted.");
             model.addAttribute("userToComparePassword", new User());
