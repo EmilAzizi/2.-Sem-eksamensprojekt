@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" th:href="@{/loginPage.css}">
+</head>
+<body>
+<div class="login-container">
+  <form th:action="'/projectManagement/' + ${userID} + '/loginPage'" method="post" class="login-form" th:object="${userToBeCompared}">
+    <h2>Login</h2>
+
+    <p th:if="${loginError}" th:text="${errorMessage}" class="error"></p>
+
+    <div class="input-group">
+      <input type="text" name="userName" th:value="*{userName}" required>
+    </div>
+    <div class="input-group">
+      <input type="text" name="userPassword" th:value="*{userPassword}" required>
+    </div>
+    <button type="submit">Login</button>
+  </form>
+</div>
+</body>
+</html>
