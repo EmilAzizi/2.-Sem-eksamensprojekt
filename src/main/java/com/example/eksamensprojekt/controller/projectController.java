@@ -115,33 +115,21 @@ public class projectController {
         return "redirect:/projectManagement";
     }
 
-    @PostMapping("/login")
-    public String handleLogin(@RequestParam("username") String username, @RequestParam("password") String password, RedirectAttributes redirectAttributes) {
-        try {
-            User user = new User();
-            user.setUserName(username);
-            user.setUserPassword(password);
-            boolean isAuthenticated = projectService.authenticateUser(user);
-            if (isAuthenticated) {
-                return "redirect:/projectManagement/projectMainPage";
-            } else {
-                redirectAttributes.addFlashAttribute("loginError", true);
-                redirectAttributes.addFlashAttribute("errorMessage", "Invalid username or password.");
-                return "redirect:/projectManagement/loginPage";
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("loginError", true);
-            redirectAttributes.addFlashAttribute("errorMessage", "System error occurred.");
-            return "redirect:/projectManagement/loginPage";
-        }
-    }
-
-
-
-    @GetMapping("/loginPage")
-    public String showLoginPage() {
+    @GetMapping("{ID}/loginPage")
+    public String loginPage(Model model, @PathVariable int ID) {
+        User userToBeComparedTo = new User();
+        model.addAttribute("userToBeCompared", userToBeComparedTo);
+        model.addAttribute("userID", ID);
         return "loginPage";
     }
 
-
+    @PostMapping("{ID}/loginPage")
+    public String loginPageRedirect(@ModelAttribute User userToBeComparedTo, @PathVariable int ID) throws SQLException {
+        Boolean isAuthenticated = PS.authenticateUser(userToBeComparedTo, ID);
+        if(isAuthenticated){
+            return "login";
+        } else {
+            return "redirect:/projectManagement/" + ID + "/loginPage";
+        }
+    }
 }
