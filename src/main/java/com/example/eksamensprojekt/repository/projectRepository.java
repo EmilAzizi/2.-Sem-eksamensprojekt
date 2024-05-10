@@ -50,7 +50,10 @@ public class projectRepository {
             User user;
             while (resultSet.next()) {
                 user = new User();
+                user.setUserID(resultSet.getInt(1));
                 user.setUserName(resultSet.getString(2));
+                user.setUserPassword(resultSet.getString(3));
+                user.setProjectID(resultSet.getInt(4));
                 userList.add(user);
             }
             return userList;
