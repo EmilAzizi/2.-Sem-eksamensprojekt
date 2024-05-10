@@ -122,7 +122,7 @@ public class projectController {
     public String deleteUser (Model model) {
         User userToComparePassword = new User();
         model.addAttribute("userToComparePassword", userToComparePassword);
-        return "login";
+        return "deleteUser";
     }
 
     @PostMapping("/deleteUser")
@@ -131,7 +131,7 @@ public class projectController {
         if (!isDeleted) {
             model.addAttribute("errorMessage", "Wrong password, the user was not deleted.");
             model.addAttribute("userToComparePassword", new User());
-            return "login";
+            return "deleteUser";
         }
         //PS.deleteUser(userToComparePassword); <-- brug denne hvis det ikke virker.
         return "redirect:/projectManagement";
