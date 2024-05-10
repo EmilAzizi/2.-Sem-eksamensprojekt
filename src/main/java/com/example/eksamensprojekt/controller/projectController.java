@@ -117,4 +117,26 @@ public class projectController {
         PS.createUser(user);
         return "redirect:/projectManagement";
     }
+
+    @GetMapping("/deleteUser")
+    public String deleteUser (Model model) {
+        User userToComparePassword = new User();
+        model.addAttribute("userToComparePassword", userToComparePassword);
+        return "login";
+    }
+
+    @PostMapping("/deleteUser")
+    public String deleteUser (@ModelAttribute User userToComparePassword, Model model) throws SQLException {
+        boolean isDeleted = PS.deleteUser(userToComparePassword);
+        if (!isDeleted) {
+            model.addAttribute("errorMessage", "Wrong password, the user was not deleted.");
+            model.addAttribute("userToComparePassword", new User());
+            return "login";
+        }
+        //PS.deleteUser(userToComparePassword); <-- brug denne hvis det ikke virker.
+        return "redirect:/projectManagement";
+    }
+
+
+
 }
