@@ -133,16 +133,17 @@ public class projectController {
         }
     }
 
-    @GetMapping("/deleteUser")
-    public String deleteUser (Model model) {
+    @GetMapping("/{ID}/deleteUser")
+    public String deleteUser (Model model, @PathVariable int ID) {
         User userToComparePassword = new User();
         model.addAttribute("userToComparePassword", userToComparePassword);
+        model.addAttribute("userID", ID);
         return "deleteUser";
     }
 
-    @PostMapping("/deleteUser")
-    public String deleteUser (@ModelAttribute User userToComparePassword, Model model) throws SQLException {
-        boolean isDeleted = PS.deleteUser(userToComparePassword);
+    @PostMapping("/{ID}/deleteUser")
+    public String deleteUser (@ModelAttribute User userToComparePassword, Model model, @PathVariable int ID) throws SQLException {
+        boolean isDeleted = PS.deleteUser(userToComparePassword, ID);
         if (!isDeleted) {
             model.addAttribute("errorMessage", "Wrong password, the user was not deleted.");
             model.addAttribute("userToComparePassword", new User());

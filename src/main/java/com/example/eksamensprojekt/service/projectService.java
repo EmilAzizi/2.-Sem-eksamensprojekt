@@ -22,7 +22,7 @@ public class projectService {
         return PR.authenticateUser(userToBeComparedTo, ID);
     }
 
-    public boolean deleteUser(User userToComparePassword) throws SQLException {
-      return PR.deleteUser(userToComparePassword);
+    public boolean deleteUser(User userToComparePassword, int ID) throws SQLException {
+      return PR.deleteUser(userToComparePassword, ID);
     }
 }
