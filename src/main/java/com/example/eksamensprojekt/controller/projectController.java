@@ -132,4 +132,24 @@ public class projectController {
             return "redirect:/projectManagement/" + ID + "/loginPage";
         }
     }
+
+    @GetMapping("/{ID}/deleteUser")
+    public String deleteUser (Model model, @PathVariable int ID) {
+        User userToComparePassword = new User();
+        model.addAttribute("userToComparePassword", userToComparePassword);
+        model.addAttribute("userID", ID);
+        return "deleteUser";
+    }
+
+    @PostMapping("/{ID}/deleteUser")
+    public String deleteUser (@ModelAttribute User userToCompare, Model model, @PathVariable int ID) throws SQLException {
+        boolean isDeleted = PS.deleteUser(userToCompare, ID);
+        if (!isDeleted) {
+            model.addAttribute("errorMessage", "Wrong password, the user was not deleted.");
+            model.addAttribute("userToComparePassword", new User());
+            return "deleteUser";
+        }
+        //PS.deleteUser(userToComparePassword); <-- brug denne hvis det ikke virker.
+        return "redirect:/projectManagement";
+    }
 }
