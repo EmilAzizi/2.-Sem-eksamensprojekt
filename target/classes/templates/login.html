@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<h1>Du er nu logget ind</h1>
-
+<h1>You are now logged in</h1>
+<ul>
+    <li th:each="projects : ${userProjects}">
+        <p th:text="'Name: ' + ${projects.getName()}"></p>
+    </li>
+    <form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="get">
+        <button type="submit">Create project</button>
+    </form>
+</ul>
 </body>
 </html>
