@@ -1,5 +1,6 @@
 package com.example.eksamensprojekt.service;
 
+import com.example.eksamensprojekt.model.Project;
 import com.example.eksamensprojekt.model.User;
 import com.example.eksamensprojekt.repository.projectRepository;
 import org.springframework.stereotype.Service;
@@ -24,5 +25,14 @@ public class projectService {
 
     public boolean deleteUser(User userToCompare, int ID) throws SQLException {
       return PR.deleteUser(userToCompare, ID);
+    }
+
+    public User findUserByIDFromRepository(int ID){
+        User userToFind = PR.findUserByID(ID);
+        return userToFind;
+    }
+
+    public void createProjectFromRepository(Project projectToBeCreated, int userID) throws SQLException {
+        PR.createProject(projectToBeCreated, userID);
     }
 }

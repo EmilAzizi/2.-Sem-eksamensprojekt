@@ -56,65 +56,108 @@ public class projectRepository {
         }
         return userList;
     }
-        public void createUser (User newUser) throws SQLException {
-            insertUser(newUser);
-            User userToBeCreated = newUser;
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
-                Statement statement = connection.createStatement();
-                String selectSQL = "SELECT * FROM users";
-                ResultSet resultSet = statement.executeQuery(selectSQL);
-                while (resultSet.next()) {
-                    int ID = resultSet.getInt("userID");
-                    String name = resultSet.getString("userName");
-                    String password = resultSet.getString("userPassword");
-                    int projectID = resultSet.getInt("projectID");
 
-                    userToBeCreated.setUserID(ID);
-                    userToBeCreated.setUserName(name);
-                    userToBeCreated.setUserPassword(password);
-                    userToBeCreated.setProjectID(projectID);
-                }
-            }
-            userList.add(userToBeCreated);
-            for (User user : userList) {
-                System.out.println(user.toString());
+    public void createUser(User newUser) throws SQLException {
+        insertUser(newUser);
+        User userToBeCreated = newUser;
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+            Statement statement = connection.createStatement();
+            String selectSQL = "SELECT * FROM users";
+            ResultSet resultSet = statement.executeQuery(selectSQL);
+            while (resultSet.next()) {
+                int ID = resultSet.getInt("userID");
+                String name = resultSet.getString("userName");
+                String password = resultSet.getString("userPassword");
+                int projectID = resultSet.getInt("projectID");
+
+                userToBeCreated.setUserID(ID);
+                userToBeCreated.setUserName(name);
+                userToBeCreated.setUserPassword(password);
+                userToBeCreated.setProjectID(projectID);
             }
         }
-
-        public Boolean authenticateUser (User userToBeComparedTo,int ID) throws SQLException {
-            boolean isAuthenticated = false;
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
-                for (User user : userList) {
-                    if (userToBeComparedTo.getUserName().equals(user.getUserName())
-                            && userToBeComparedTo.getUserPassword().equals(user.getUserPassword())) {
-                        isAuthenticated = true;
-                    }
-                }
-                return isAuthenticated;
-            }
-        }
-
-        public boolean deleteUser (User userToCompare, int ID) throws SQLException {
-            User userToBeDeleted = null;
-            for (User ul : userList) {
-                if(ul.getUserID() == ID){
-                    if (userToCompare.getUserPassword().equals(ul.getUserPassword())) {
-                        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
-                            PreparedStatement ps = connection.prepareStatement("DELETE FROM users WHERE userPassword = ? AND userName = ?;");
-                            ps.setString(1, userToCompare.getUserPassword());
-                            ps.setString(1, userToCompare.getUserName());
-                            ps.executeUpdate();
-                            userToBeDeleted = ul;
-                        }
-                    }
-                }
-            }
-            if (userToBeDeleted != null) {
-                userList.remove(userToBeDeleted);
-                return true;
-            } else {
-                return false;
-            }
-
+        userList.add(userToBeCreated);
+        for (User user : userList) {
+            System.out.println(user.toString());
         }
     }
+
+    public Boolean authenticateUser(User userToBeComparedTo, int ID) throws SQLException {
+        boolean isAuthenticated = false;
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+            for (User user : userList) {
+                if (userToBeComparedTo.getUserName().equals(user.getUserName())
+                        && userToBeComparedTo.getUserPassword().equals(user.getUserPassword())) {
+                    isAuthenticated = true;
+                }
+            }
+            return isAuthenticated;
+        }
+    }
+
+    public boolean deleteUser(User userToCompare, int ID) throws SQLException {
+        User userToBeDeleted = null;
+        for (User userToBeComparedWith : userList) {
+            if (userToBeComparedWith.getUserID() == ID) {
+                if (userToCompare.getUserName().equals(userToBeComparedWith.getUserName()) && userToCompare.getUserPassword().equals(userToBeComparedWith.getUserPassword())) {
+                    try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+                        PreparedStatement ps = connection.prepareStatement("DELETE FROM users WHERE userPassword = ? AND userName = ?;");
+                        ps.setString(1, userToCompare.getUserPassword());
+                        ps.setString(2, userToCompare.getUserName());
+                        ps.executeUpdate();
+                        userToBeDeleted = userToBeComparedWith;
+                    }
+                }
+            }
+        }
+        if (userToBeDeleted != null) {
+            userList.remove(userToBeDeleted);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public User findUserByID(int ID) {
+        User userFound = null;
+        for (User userToFind : userList) {
+            if (userToFind.getUserID() == ID) {
+                userFound = userToFind;
+            }
+        }
+        return userFound;
+    }
+
+    public void createProject(Project projectToBeCreated, int userID) throws SQLException {
+        Project newProject = new Project();
+        for (User userToFind : userList) {
+            if (userToFind.getUserID() == userID) {
+                try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+                    PreparedStatement ps = connection.prepareStatement("INSERT INTO project (projectName, projectDescription, projectDate)" +
+                            "VALUES(?,?,?);");
+                    ps.setString(1, projectToBeCreated.getName());
+                    ps.setString(2, projectToBeCreated.getDescription());
+                    ps.setString(3, projectToBeCreated.getDate());
+                    ps.executeUpdate();
+
+                    Statement statement = connection.createStatement();
+                    String SQL = "SELECT * FROM project";
+                    ResultSet resultSet = statement.executeQuery(SQL);
+                    while (resultSet.next()) {
+                        int ID = resultSet.getInt("projectID");
+                        String name = resultSet.getString("projectName");
+                        String description = resultSet.getString("projectDescription");
+                        String date = resultSet.getString("projectDate");
+
+                        newProject.setName(name);
+                        newProject.setDate(date);
+                        newProject.setID(ID);
+                        newProject.setDescription(description);
+                    }
+                    user.getUsersProjects().add(newProject);
+                }
+            }
+        }
+    }
+}

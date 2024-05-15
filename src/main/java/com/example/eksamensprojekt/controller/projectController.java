@@ -1,5 +1,6 @@
 package com.example.eksamensprojekt.controller;
 
+import com.example.eksamensprojekt.model.Project;
 import com.example.eksamensprojekt.model.User;
 import com.example.eksamensprojekt.service.projectService;
 import org.springframework.stereotype.Controller;
@@ -123,14 +124,16 @@ public class projectController {
         return "loginPage";
     }
 
-    @PostMapping("{ID}/loginPage")
-    public String loginPageRedirect(@ModelAttribute User userToBeComparedTo, @PathVariable int ID) throws SQLException {
+    @PostMapping("{ID}/userLogin")
+    public String loginPageRedirect(@ModelAttribute User userToBeComparedTo, @PathVariable int ID, Model model) throws SQLException {
         Boolean isAuthenticated = PS.authenticateUser(userToBeComparedTo, ID);
-        if(isAuthenticated){
+        User userToFind = PS.findUserByIDFromRepository(ID);
+        model.addAttribute("userProjects", userToFind.getUsersProjects());
+        model.addAttribute("userID", userToFind.getUserID());
+        if(!isAuthenticated){
             return "login";
-        } else {
-            return "redirect:/projectManagement/" + ID + "/loginPage";
         }
+        return "redirect:redirect:/projectManagement";
     }
 
     @GetMapping("/{ID}/deleteUser")
@@ -151,5 +154,19 @@ public class projectController {
         }
         //PS.deleteUser(userToComparePassword); <-- brug denne hvis det ikke virker.
         return "redirect:/projectManagement";
+    }
+
+    @GetMapping("/{ID}/userLogin/createProject")
+    public String createProject(@PathVariable int ID, Model model){
+        Project projectToBeCreated = new Project();
+        model.addAttribute("userID", ID);
+        model.addAttribute("projectToBeCreated", projectToBeCreated);
+        return "createProject";
+    }
+
+    @PostMapping("/{ID}/userLogin/createProject")
+    public String createProject(@ModelAttribute Project projectToBeCreated, @PathVariable int ID) throws SQLException {
+        PS.createProjectFromRepository(projectToBeCreated, ID);
+        return "redirect:/projectManagement/" + ID + "/userLogin";
     }
 }
