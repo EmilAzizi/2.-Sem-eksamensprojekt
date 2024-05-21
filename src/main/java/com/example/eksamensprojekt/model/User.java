@@ -1,9 +1,16 @@
 package com.example.eksamensprojekt.model;
 
+import java.util.*;
+
 public class User {
-    private int userID = 0;
-    private String userName;
-    private String userPassword;
+     int userID = 0;
+     String userName;
+     String userPassword;
+     List<Project> usersProjects;
+
+     public User(){
+         usersProjects = new ArrayList<>();
+     }
     private int projectID = 0;
 
     public void setUserID(int userID) {
@@ -36,5 +43,19 @@ public class User {
 
     public String getUserPassword() {
         return userPassword;
+    }
+
+    public List<Project> getUsersProjects() {
+        return usersProjects;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userID=" + userID +
+                ", userName='" + userName + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", projectID=" + projectID +
+                '}';
     }
 }

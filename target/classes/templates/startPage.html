@@ -8,15 +8,25 @@
 <body>
 <h1>Welcome to wishlist creator</h1>
 
+
 <ul>
 <li th:each="user : ${userList}">
   <p th:text="'User name: ' + ${user.getUserName()}"></p>
+  <form th:action="'/projectManagement/'+ ${user.getUserID()} + '/loginPage'" method="get">
+    <button type="submit">Login</button>
+  </form>
+  <a th:href="@{'/projectManagement/' + ${user.getUserID()} + '/deleteUser'}">
+  <button type="button" class="deleteButton">Delete user</button>
+  </a>
 </li>
 </ul>
+
+
 
 <a th:href="@{'/projectManagement/createUser'}">
   <button class="createButton" type="button">Create user</button>
 </a>
+
 
 </body>
 </html>

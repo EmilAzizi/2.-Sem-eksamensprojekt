@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+</head>
+<body>
+<h1>Login</h1>
+<form th:action="@{'/projectManagement/' + ${userID} + '/userLogin'}" method="post" th:object="${userToBeCompared}">
+  <p>
+    <label>Username:</label>
+    <input name="username" type="text" th:field="*{userName}">
+  </p>
+  <p>
+    <label>Password:</label>
+    <input name="password" type="password" th:field="*{userPassword}">
+  </p>
+  <p>
+    <button type="submit">Login</button>
+  </p>
+</form>
+</body>
+</html>

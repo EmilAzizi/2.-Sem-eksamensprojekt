@@ -1,14 +1,12 @@
 package com.example.eksamensprojekt.controller;
 
+import com.example.eksamensprojekt.model.Project;
 import com.example.eksamensprojekt.model.User;
 import com.example.eksamensprojekt.service.projectService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLException;
 
@@ -18,7 +16,7 @@ public class projectController {
     projectService PS = new projectService();
 
     @GetMapping("")
-    public String start(Model model) {
+    public String start(Model model) throws SQLException {
         model.addAttribute("userList", PS.getUserList());
         return "startPage";
     }
@@ -106,15 +104,78 @@ public class projectController {
     }
 
     @GetMapping("/createUser")
-    public String createUser (Model model){
+    public String createUser(Model model) {
         User newUser = new User();
         model.addAttribute("newUser", newUser);
         return "createUser";
     }
 
     @PostMapping("/createUser")
-    public String createNewUser (@ModelAttribute User user) throws SQLException {
+    public String createNewUser(@ModelAttribute User user) throws SQLException {
         PS.createUser(user);
         return "redirect:/projectManagement";
     }
+
+    @GetMapping("{ID}/loginPage")
+    public String loginPage(Model model, @PathVariable int ID) {
+        User userToBeComparedTo = new User();
+        model.addAttribute("userToBeCompared", userToBeComparedTo);
+        model.addAttribute("userID", ID);
+        return "loginPage";
+    }
+
+
+    @PostMapping("{ID}/userLogin")
+    @GetMapping("{ID}/userLogin")
+    public String loginPageRedirect(@ModelAttribute User userToBeComparedTo, @PathVariable int ID, Model model) throws SQLException {
+        Boolean isAuthenticated = PS.authenticateUser(userToBeComparedTo, ID);
+        if (isAuthenticated) {
+            User userToFind = PS.findUserByIDFromRepository(ID);
+            model.addAttribute("userProjects", userToFind.getUsersProjects());
+            model.addAttribute("userID", userToFind.getUserID());
+            return "login";
+        } else {
+            return "redirect:/projectManagement";
+        }
+    }
+
+
+    @GetMapping("/{ID}/deleteUser")
+    public String deleteUser (Model model, @PathVariable int ID) {
+        User userToComparePassword = new User();
+        model.addAttribute("userToComparePassword", userToComparePassword);
+        model.addAttribute("userID", ID);
+        return "deleteUser";
+    }
+
+    @PostMapping("/{ID}/deleteUser")
+    public String deleteUser (@ModelAttribute User userToCompare, Model model, @PathVariable int ID) throws SQLException {
+        boolean isDeleted = PS.deleteUser(userToCompare, ID);
+        if (!isDeleted) {
+            model.addAttribute("errorMessage", "Wrong password, the user was not deleted.");
+            model.addAttribute("userToComparePassword", new User());
+            return "deleteUser";
+        }
+        //PS.deleteUser(userToComparePassword); <-- brug denne hvis det ikke virker.
+        return "redirect:/projectManagement";
+    }
+
+    @GetMapping("/{ID}/userLogin/createProject") // Corrected mapping
+    public String createProjectForm(@PathVariable int ID, Model model) {
+        Project projectToBeCreated = new Project();
+        model.addAttribute("userID", ID);
+        model.addAttribute("projectToBeCreated", projectToBeCreated);
+        return "createProject";
+    }
+
+    @PostMapping("/{ID}/userLogin/createProject")
+    public String createProject(@ModelAttribute Project projectToBeCreated, @PathVariable int ID) throws SQLException {
+        try {
+            PS.createProjectFromRepository(projectToBeCreated, ID);
+            return "redirect:/projectManagement/" + ID + "/userLogin";
+        } catch (SQLException e) {
+            return "errorPage";
+        }
+    }
+
 }
