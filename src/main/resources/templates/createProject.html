@@ -6,22 +6,21 @@
 </head>
 <body>
 <h1>Create project here!</h1>
-<form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="post" th:object="${projectToBeCreated}">
+<form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="get" th:object="${projectToBeCreated}">
     <p>
         <label>Name:</label>
         <input name="name" type="text" th:field="*{name}">
     </p>
     <p>
-    <label>Description:</label>
-    <input name="description" type="text" th:field="*{description}">
-</p>
+        <label>Description:</label>
+        <input name="description" type="text" th:field="*{description}">
+    </p>
     <p>
         <label>Date:</label>
         <input name="date" type="text" th:field="*{date}">
     </p>
     <p>
         <button type="submit">Add project</button>
-
     </p>
 </form>
 </body>

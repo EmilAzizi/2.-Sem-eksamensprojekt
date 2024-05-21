@@ -124,17 +124,21 @@ public class projectController {
         return "loginPage";
     }
 
+
     @PostMapping("{ID}/userLogin")
+    @GetMapping("{ID}/userLogin")
     public String loginPageRedirect(@ModelAttribute User userToBeComparedTo, @PathVariable int ID, Model model) throws SQLException {
         Boolean isAuthenticated = PS.authenticateUser(userToBeComparedTo, ID);
-        User userToFind = PS.findUserByIDFromRepository(ID);
-        model.addAttribute("userProjects", userToFind.getUsersProjects());
-        model.addAttribute("userID", userToFind.getUserID());
-        if(!isAuthenticated){
+        if (isAuthenticated) {
+            User userToFind = PS.findUserByIDFromRepository(ID);
+            model.addAttribute("userProjects", userToFind.getUsersProjects());
+            model.addAttribute("userID", userToFind.getUserID());
             return "login";
+        } else {
+            return "redirect:/projectManagement";
         }
-        return "redirect:redirect:/projectManagement";
     }
+
 
     @GetMapping("/{ID}/deleteUser")
     public String deleteUser (Model model, @PathVariable int ID) {
@@ -156,8 +160,8 @@ public class projectController {
         return "redirect:/projectManagement";
     }
 
-    @GetMapping("/{ID}/userLogin/createProject")
-    public String createProject(@PathVariable int ID, Model model){
+    @GetMapping("/{ID}/userLogin/createProject") // Corrected mapping
+    public String createProjectForm(@PathVariable int ID, Model model) {
         Project projectToBeCreated = new Project();
         model.addAttribute("userID", ID);
         model.addAttribute("projectToBeCreated", projectToBeCreated);
@@ -166,7 +170,12 @@ public class projectController {
 
     @PostMapping("/{ID}/userLogin/createProject")
     public String createProject(@ModelAttribute Project projectToBeCreated, @PathVariable int ID) throws SQLException {
-        PS.createProjectFromRepository(projectToBeCreated, ID);
-        return "redirect:/projectManagement/" + ID + "/userLogin";
+        try {
+            PS.createProjectFromRepository(projectToBeCreated, ID);
+            return "redirect:/projectManagement/" + ID + "/userLogin";
+        } catch (SQLException e) {
+            return "errorPage";
+        }
     }
+
 }
