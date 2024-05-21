@@ -134,30 +134,34 @@ public class projectRepository {
         for (User userToFind : userList) {
             if (userToFind.getUserID() == userID) {
                 try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO project (projectName, projectDescription, projectDate)" +
-                            "VALUES(?,?,?);");
+                    // Insert the new project into the database
+                    PreparedStatement ps = connection.prepareStatement(
+                            "INSERT INTO project (projectName, projectDescription, projectDate, ownerID) VALUES (?, ?, ?, ?);",
+                            Statement.RETURN_GENERATED_KEYS
+                    );
                     ps.setString(1, projectToBeCreated.getName());
                     ps.setString(2, projectToBeCreated.getDescription());
                     ps.setString(3, projectToBeCreated.getDate());
+                    ps.setInt(4, userID);  // Set the contributersID to the userID
                     ps.executeUpdate();
 
-                    Statement statement = connection.createStatement();
-                    String SQL = "SELECT * FROM project";
-                    ResultSet resultSet = statement.executeQuery(SQL);
-                    while (resultSet.next()) {
-                        int ID = resultSet.getInt("projectID");
-                        String name = resultSet.getString("projectName");
-                        String description = resultSet.getString("projectDescription");
-                        String date = resultSet.getString("projectDate");
+                    // Get the generated project ID
+                    ResultSet generatedKeys = ps.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        int newProjectID = generatedKeys.getInt(1);
+                        newProject.setID(newProjectID);
 
-                        newProject.setName(name);
-                        newProject.setDate(date);
-                        newProject.setID(ID);
-                        newProject.setDescription(description);
+                        // Set project details
+                        newProject.setName(projectToBeCreated.getName());
+                        newProject.setDescription(projectToBeCreated.getDescription());
+                        newProject.setDate(projectToBeCreated.getDate());
+
+                        // Add the project to the user's project list
+                        userToFind.getUsersProjects().add(newProject);
                     }
-                    user.getUsersProjects().add(newProject);
                 }
             }
         }
     }
+
 }

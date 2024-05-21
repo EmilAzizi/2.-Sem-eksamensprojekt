@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Create project here!</h1>
-<form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="get" th:object="${projectToBeCreated}">
+<form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="post" th:object="${projectToBeCreated}">
     <p>
         <label>Name:</label>
         <input name="name" type="text" th:field="*{name}">

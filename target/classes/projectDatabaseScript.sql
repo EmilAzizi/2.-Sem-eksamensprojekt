@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS project (
     labelID INT,
     contributersID INT,
     FOREIGN KEY (labelID) REFERENCES label(labelID),
-    FOREIGN KEY (contributersID) REFERENCES contributer(contributerID)
+    FOREIGN KEY (contributersID) REFERENCES users(contributerID)
 );
 
 CREATE TABLE IF NOT EXISTS users(
