@@ -9,6 +9,12 @@
 <ul>
     <li th:each="projects : ${userProjects}">
         <p th:text="'Name: ' + ${projects.getName()}"></p>
+        <form th:action="@{'/projectManagement/' + ${userID} + '/userPage/editProject/' + ${projects.getID()}}">
+            <button type="submit">Edit project</button>
+        </form>
+        <form th:action="@{'/projectManagement/' + ${userID} + '/userPage/deleteProject/' + ${projects.getID()}}" method="post">
+            <button type="submit">Delete project</button>
+        </form>
     </li>
     <form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="get">
         <button type="submit">Create project</button>

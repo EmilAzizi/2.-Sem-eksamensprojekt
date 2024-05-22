@@ -39,4 +39,11 @@ public class projectService {
     public Project findProjectByIDFromRepository(int userID, int projectID){
         return PR.findProjectByID(userID, projectID);
     }
+
+    public void editProjectFromRepository(Project projectToBeEdited, int userID, int projectID) throws SQLException {
+        PR.editProject(projectToBeEdited, userID,projectID);
+    }
+    public void deleteProjectFromRepository(int userID, int projectID) throws SQLException {
+        PR.deleteProject(userID, projectID);
+    }
 }

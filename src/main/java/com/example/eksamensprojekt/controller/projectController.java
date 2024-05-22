@@ -195,6 +195,14 @@ public class projectController {
 
     @PostMapping("/{userID}/userPage/editProject/{projectID}")
     public String editProject(@ModelAttribute Project projectToBeUpdated, @PathVariable int userID, @PathVariable int projectID) throws SQLException{
-
+        PS.editProjectFromRepository(projectToBeUpdated, userID, projectID);
+        return "redirect:/projectManagement/" + userID + "/userPage";
     }
+
+    @PostMapping("/{userID}/userPage/deleteProject/{projectID}")
+    public String deleteProject(@PathVariable int userID, @PathVariable int projectID) throws SQLException {
+        PS.deleteProjectFromRepository(userID, projectID);
+        return "redirect:/projectManagement/" + userID + "/userPage";
+    }
+
 }
