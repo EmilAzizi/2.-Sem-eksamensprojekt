@@ -35,4 +35,8 @@ public class projectService {
     public void createProjectFromRepository(Project projectToBeCreated, int userID) throws SQLException {
         PR.createProject(projectToBeCreated, userID);
     }
+
+    public Project findProjectByIDFromRepository(int userID, int projectID){
+        return PR.findProjectByID(userID, projectID);
+    }
 }

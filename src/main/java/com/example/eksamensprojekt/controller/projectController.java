@@ -182,4 +182,19 @@ public class projectController {
         model.addAttribute("userID", ID);
         return "projectAccept";
     }
+
+    @GetMapping("/{userID}/userPage/editProject/{projectID}")
+    public String editProject(@PathVariable int userID, Model model, @PathVariable int projectID){
+        Project projectToEdit = PS.findProjectByIDFromRepository(userID, projectID);
+        model.addAttribute("projectToEdit", projectToEdit);
+        model.addAttribute("userID", userID);
+        model.addAttribute("projectID", projectID);
+
+        return "editProject";
+    }
+
+    @PostMapping("/{userID}/userPage/editProject/{projectID}")
+    public String editProject(@ModelAttribute Project projectToBeUpdated, @PathVariable int userID, @PathVariable int projectID) throws SQLException{
+
+    }
 }

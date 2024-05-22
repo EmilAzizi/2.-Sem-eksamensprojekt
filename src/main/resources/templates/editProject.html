@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit project</title>
+</head>
+<body>
+    <h1>What would you like to change?</h1>
+    <form th:action="@{'/projectManagement/' + ${userID} + '/userPage/editProject/' + ${projectID}}" method="post" th:object="projectToEdit">
+        <p>
+            <label>Name:</label>
+            <input name="name" type="text" th:field="*{projectToEdit.setName(name)}">
+        </p
+        ><p>
+        <label>Description:</label>
+        <input name="description" type="text" th:field="*{projectToEdit.setName(description)}">
+    </p>
+        <p>
+            <label>Date:</label>
+            <input name="date" type="text" th:field="*{projectToEdit.setName(date)}">
+        </p>
+        <p>
+            <button type="submit">Add wish</button>
+            <a th:href="@{'/projectManagement/' + ${userID} + '/userPage'}">
+                <button type="button">Cancel</button>
+            </a>
+        </p>
+    </form>
+</body>
+</html>

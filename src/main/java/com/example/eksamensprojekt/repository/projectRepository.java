@@ -164,4 +164,39 @@ public class projectRepository {
         }
     }
 
+    public Project findProjectByID(int userID ,int projectID){
+        Project projectToFind = null;
+
+        for(User user : userList){
+            if(user.getUserID() == userID){
+                for(Project project : user.getUsersProjects()){
+                    if(project.getID() == projectID){
+                        projectToFind = project;
+                    }
+                }
+            }
+        }
+
+        if(!projectToFind.equals(null)){
+            return projectToFind;
+        } else {
+            return null;
+        }
+    }
+
+    public Project editProject(Project projectToBeEdited, int userID, int projectID) throws SQLException {
+        Project projectToEdit = null;
+        for(User user : userList){
+            if(user.getUserID() == userID){
+                for(Project projectToFind : user.getUsersProjects()){
+                    if(projectToFind.getID() == projectID){
+                        projectToEdit = projectToBeEdited;
+                        try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")){
+                            PreparedStatement statement = connection.prepareStatement("UPDATE project SET project")
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
