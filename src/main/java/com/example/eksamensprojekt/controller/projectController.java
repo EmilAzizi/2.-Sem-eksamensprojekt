@@ -13,11 +13,11 @@ import java.util.List;
 @Controller
 @RequestMapping("projectManagement")
 public class projectController {
-    projectService PS = new projectService();
+    projectService projectService = new projectService();
 
     @GetMapping("")
     public String start(Model model) throws SQLException {
-        model.addAttribute("userList", PS.getUserList());
+        model.addAttribute("userList", projectService.getUserList());
         return "startPage";
     }
 
@@ -31,78 +31,6 @@ public class projectController {
         return "projectMainPage";
     }
 
-    @PostMapping("/createProject")
-    public String createProject() {
-        // Logic to create a new project
-        return "redirect:/";
-    }
-
-    @PostMapping("/selectProject")
-    public String selectProject(@RequestParam("projectId") String projectId) {
-        // Logic to select a project
-        return "redirect:/"; // Redirect to a specific project page or dashboard
-    }
-
-    @PostMapping("/deleteProject")
-    public String deleteProject(@RequestParam("projectId") String projectId) {
-        // Logic to delete a project
-        return "redirect:/";
-    }
-
-    @PostMapping("/addTask")
-    public String addTask() {
-        // Add task logic
-        return "redirect:/";
-    }
-
-    @PostMapping("/deleteTask")
-    public String deleteTask() {
-        // Delete task logic
-        return "redirect:/";
-    }
-
-    @PostMapping("/editTask")
-    public String editTask() {
-        // Edit task logic
-        return "redirect:/";
-    }
-
-    @PostMapping("/addColumn")
-    public String addColumn() {
-        // Add task logic
-        return "redirect:/";
-    }
-
-    @PostMapping("/deleteColumn")
-    public String deleteColumn() {
-        // Delete task logic
-        return "redirect:/";
-    }
-
-    @PostMapping("/editColumn")
-    public String editColumn() {
-        // Edit task logic
-        return "redirect:/";
-    }
-
-    @PostMapping("/addLabel")
-    public String addLabel() {
-        // Add task logic
-        return "redirect:/";
-    }
-
-    @PostMapping("/deleteLabel")
-    public String deleteLabel() {
-        // Delete task logic
-        return "redirect:/";
-    }
-
-    @PostMapping("/editLabel")
-    public String editLabel() {
-        // Edit task logic
-        return "redirect:/";
-    }
-
     @GetMapping("/createUser")
     public String createUser(Model model) {
         User newUser = new User();
@@ -112,7 +40,7 @@ public class projectController {
 
     @PostMapping("/createUser")
     public String createNewUser(@ModelAttribute User user) throws SQLException {
-        PS.createUser(user);
+        projectService.createUser(user);
         return "redirect:/projectManagement";
     }
 
@@ -126,9 +54,9 @@ public class projectController {
 
     @PostMapping("{ID}/userLogin")
     public String loginPageRedirect(@ModelAttribute User userToBeComparedTo, @PathVariable int ID, Model model) throws SQLException {
-        Boolean isAuthenticated = PS.authenticateUser(userToBeComparedTo, ID);
+        Boolean isAuthenticated = projectService.authenticateUser(userToBeComparedTo, ID);
         if (isAuthenticated) {
-            User userToFind = PS.findUserByIDFromRepository(ID);
+            User userToFind = projectService.findUserByIDFromRepository(ID);
             model.addAttribute("userName", userToFind.getUserName());
             model.addAttribute("userProjects", userToFind.getUsersProjects());
             model.addAttribute("userID", userToFind.getUserID());
@@ -140,7 +68,7 @@ public class projectController {
 
     @GetMapping("{ID}/userPage")
     public String viewUser(Model model, @PathVariable int ID){
-        User userToView = PS.findUserByIDFromRepository(ID);
+        User userToView = projectService.findUserByIDFromRepository(ID);
         List<Project> userProjects = userToView.getUsersProjects();
         model.addAttribute("userName", userToView.getUserName());
         model.addAttribute("userToView", userToView);
@@ -159,7 +87,7 @@ public class projectController {
 
     @PostMapping("/{ID}/deleteUser")
     public String deleteUser (@ModelAttribute User userToCompare, Model model, @PathVariable int ID) throws SQLException {
-        boolean isDeleted = PS.deleteUser(userToCompare, ID);
+        boolean isDeleted = projectService.deleteUser(userToCompare, ID);
         if (!isDeleted) {
             model.addAttribute("errorMessage", "Wrong password, the user was not deleted.");
             model.addAttribute("userToComparePassword", new User());
@@ -178,14 +106,14 @@ public class projectController {
 
     @PostMapping("/{ID}/userLogin/createProject")
     public String createProject(@ModelAttribute Project projectToBeCreated, @PathVariable int ID, Model model) throws SQLException {
-        PS.createProjectFromRepository(projectToBeCreated, ID);
+        projectService.createProjectFromRepository(projectToBeCreated, ID);
         model.addAttribute("userID", ID);
         return "projectAccept";
     }
 
     @GetMapping("/{userID}/userPage/editProject/{projectID}")
     public String editProject(@PathVariable int userID, Model model, @PathVariable int projectID){
-        Project projectToEdit = PS.findProjectByIDFromRepository(userID, projectID);
+        Project projectToEdit = projectService.findProjectByIDFromRepository(userID, projectID);
         model.addAttribute("projectToEdit", projectToEdit);
         model.addAttribute("userID", userID);
         model.addAttribute("projectID", projectID);
@@ -195,14 +123,15 @@ public class projectController {
 
     @PostMapping("/{userID}/userPage/editProject/{projectID}")
     public String editProject(@ModelAttribute Project projectToBeUpdated, @PathVariable int userID, @PathVariable int projectID) throws SQLException{
-        PS.editProjectFromRepository(projectToBeUpdated, userID, projectID);
+        projectService.editProjectFromRepository(projectToBeUpdated, userID, projectID);
         return "redirect:/projectManagement/" + userID + "/userPage";
     }
 
     @PostMapping("/{userID}/userPage/deleteProject/{projectID}")
     public String deleteProject(@PathVariable int userID, @PathVariable int projectID) throws SQLException {
-        PS.deleteProjectFromRepository(userID, projectID);
+        projectService.deleteProjectFromRepository(userID, projectID);
         return "redirect:/projectManagement/" + userID + "/userPage";
     }
+
 
 }

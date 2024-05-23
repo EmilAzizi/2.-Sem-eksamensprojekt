@@ -21,6 +21,10 @@ public class User {
         this.projectID = projectID;
     }
 
+    public void setUsersProjects(List<Project> userProjects){
+        this.usersProjects = userProjects;
+    }
+
     public void setUserName(String userName) {
         this.userName = userName;
     }

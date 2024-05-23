@@ -10,40 +10,40 @@ import java.util.List;
 
 @Service
 public class projectService {
-    static projectRepository PR = new projectRepository();
+    static projectRepository projectRepository = new projectRepository();
     public List<User> getUserList() throws SQLException{
-        return PR.getUserList();
+        return projectRepository.getUserList();
     }
 
     public void createUser(User newUser) throws SQLException {
-        PR.createUser(newUser);
+        projectRepository.createUser(newUser);
     }
   
     public Boolean authenticateUser(User userToBeComparedTo, int ID) throws SQLException {
-        return PR.authenticateUser(userToBeComparedTo, ID);
+        return projectRepository.authenticateUser(userToBeComparedTo, ID);
     }
 
     public boolean deleteUser(User userToCompare, int ID) throws SQLException {
-      return PR.deleteUser(userToCompare, ID);
+      return projectRepository.deleteUser(userToCompare, ID);
     }
 
     public User findUserByIDFromRepository(int ID){
-        User userToFind = PR.findUserByID(ID);
+        User userToFind = projectRepository.findUserByID(ID);
         return userToFind;
     }
 
     public void createProjectFromRepository(Project projectToBeCreated, int userID) throws SQLException {
-        PR.createProject(projectToBeCreated, userID);
+        projectRepository.createProject(projectToBeCreated, userID);
     }
 
     public Project findProjectByIDFromRepository(int userID, int projectID){
-        return PR.findProjectByID(userID, projectID);
+        return projectRepository.findProjectByID(userID, projectID);
     }
 
     public void editProjectFromRepository(Project projectToBeEdited, int userID, int projectID) throws SQLException {
-        PR.editProject(projectToBeEdited, userID,projectID);
+        projectRepository.editProject(projectToBeEdited, userID,projectID);
     }
     public void deleteProjectFromRepository(int userID, int projectID) throws SQLException {
-        PR.deleteProject(userID, projectID);
+        projectRepository.deleteProject(userID, projectID);
     }
 }

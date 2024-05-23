@@ -51,10 +51,29 @@ public class projectRepository {
                 user.setUserName(resultSet.getString(2));
                 user.setUserPassword(resultSet.getString(3));
                 user.setProjectID(resultSet.getInt(4));
+                user.setUsersProjects(getProjectsForUser(user.getUserID()));
                 userList.add(user);
             }
         }
         return userList;
+    }
+
+    public List<Project> getProjectsForUser(int userID) throws SQLException{
+        List<Project> projects = new ArrayList<>();
+        try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")){
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM project WHERE ownerID = ?");
+            ps.setInt(1, userID);
+            ResultSet resultSet = ps.executeQuery();
+            while(resultSet.next()){
+                Project project = new Project();
+                project.setID(resultSet.getInt("projectID"));
+                project.setName(resultSet.getString("projectName"));
+                project.setDescription(resultSet.getString("projectDescription"));
+                project.setDate(resultSet.getString("projectDate"));
+                projects.add(project);
+            }
+        }
+        return projects;
     }
 
     public void createUser(User newUser) throws SQLException {

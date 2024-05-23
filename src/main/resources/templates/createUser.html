@@ -12,6 +12,9 @@
     <label for="password">Write your password</label>
     <input type="text" id="password" name="password" required th:field="*{userPassword}">
     <button type="submit">create</button>
+    <a th:href="@{'/projectManagement'}">
+        <button type="button">Cancel</button>
+    </a>
 </form>
 </body>
 </html>

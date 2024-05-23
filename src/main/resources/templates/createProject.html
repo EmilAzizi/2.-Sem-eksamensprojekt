@@ -22,6 +22,10 @@
     <p>
         <button type="submit">Add project</button>
     </p>
+
+    <a th:href="@{'/projectManagement/' + ${userID} + '/userPage'}">
+        <button type="button">Cancel</button>
+    </a>
 </form>
 </body>
 </html>

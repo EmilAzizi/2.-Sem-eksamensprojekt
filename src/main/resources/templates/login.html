@@ -19,6 +19,9 @@
     <form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="get">
         <button type="submit">Create project</button>
     </form>
+    <a th:href="@{'/projectManagement'}">
+        <button type="button">Logout</button>
+    </a>
 </ul>
 </body>
 </html>
