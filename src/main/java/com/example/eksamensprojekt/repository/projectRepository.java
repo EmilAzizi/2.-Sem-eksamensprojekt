@@ -159,7 +159,7 @@ public class projectRepository {
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
             // Insert the new project into the database
             PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO status (statusName) VALUES (?);");
+                    "INSERT INTO projectStatus (statusName) VALUES (?);");
             ps.setString(1, newStatus.getStatus());
             ps.executeUpdate();
             status.add(newStatus);
@@ -169,7 +169,7 @@ public class projectRepository {
     public List<StatusOption> getStatuses() throws SQLException {
         List<StatusOption> statusList = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM status");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM projectStatus");
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
                 StatusOption status = new StatusOption();
@@ -300,6 +300,22 @@ public class projectRepository {
                 statement.setInt(1, projectID);
                 statement.executeUpdate();
             }
+        }
+    }
+
+    public void deleteStatus(int statusID) throws SQLException {
+        StatusOption statusToBeDeleted = null;
+        for(StatusOption status : status){
+            if(status.getStatusID() == statusID){
+                try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+                    PreparedStatement statement = connection.prepareStatement("DELETE FROM projectStatus WHERE statusID = ?;");
+                    statement.setInt(1, statusID);
+                    statusToBeDeleted = status;
+                }
+            }
+        }
+        if(!statusToBeDeleted.equals(null)){
+            status.remove(statusToBeDeleted);
         }
     }
 

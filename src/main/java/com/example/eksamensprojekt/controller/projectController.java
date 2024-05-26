@@ -57,11 +57,13 @@ public class projectController {
     @PostMapping("{ID}/userLogin")
     public String loginPageRedirect(@ModelAttribute User userToBeComparedTo, @PathVariable int ID, Model model) throws SQLException {
         Boolean isAuthenticated = projectService.authenticateUser(userToBeComparedTo, ID);
+        List<StatusOption> statusList = projectService.getStatusListFromRepository();
         if (isAuthenticated) {
             User userToFind = projectService.findUserByIDFromRepository(ID);
             model.addAttribute("userName", userToFind.getUserName());
             model.addAttribute("userProjects", userToFind.getUsersProjects());
             model.addAttribute("userID", userToFind.getUserID());
+            model.addAttribute("statusOptions", statusList);
             return "login";
         } else {
             return "redirect:/projectManagement";
@@ -153,5 +155,18 @@ public class projectController {
         return "redirect:/projectManagement/" + userID + "/userPage";
     }
 
-    // remember to delete a status too!
+    @GetMapping("/{userID}/userPage/deleteStatus/{statusID}")
+    public String deleteStatus(Model model, @PathVariable int userID, @PathVariable int statusID) throws SQLException {
+        List<StatusOption> status = projectService.getStatusListFromRepository();
+        model.addAttribute("projectStatuses", status);
+        model.addAttribute("statusID", statusID);
+
+        return "deleteStatus";
+    }
+
+    @PostMapping("/{userID}/userPage/deleteStatus/{statusID}")
+    public String deleteStatus(@PathVariable int userID, @PathVariable int statusID) throws SQLException {
+        projectService.deleteStatusFromRepository(statusID);
+        return "redirect:/projectManagement/" + userID + "/userPage";
+    }
 }

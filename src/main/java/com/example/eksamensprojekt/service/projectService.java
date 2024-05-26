@@ -55,4 +55,8 @@ public class projectService {
     public void createStatusFromRepository(StatusOption status) throws SQLException {
         projectRepository.createStatus(status);
     }
+
+    public void deleteStatusFromRepository(int statusID) throws SQLException {
+        projectRepository.deleteStatus(statusID);
+    }
 }

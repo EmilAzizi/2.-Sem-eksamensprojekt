@@ -2,13 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>User Page</title>
 </head>
 <body>
 <h1 th:text="'Welcome ' + ${userName}"></h1>
 <ul>
     <li th:each="projects : ${userProjects}">
         <p th:text="'Name: ' + ${projects.getName()}"></p>
+        <p th:text="'Description: ' + ${projects.getDescription()}"></p>
         <form th:action="@{'/projectManagement/' + ${userID} + '/userPage/editProject/' + ${projects.getID()}}">
             <button type="submit">Edit project</button>
         </form>
@@ -23,12 +24,23 @@
             <button type="submit">Create status</button>
         </form>
     </li>
-    <form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="get">
-        <button type="submit">Create project</button>
-    </form>
-    <a th:href="@{'/projectManagement'}">
-        <button type="button">Logout</button>
-    </a>
 </ul>
+
+<h2>Manage Statuses</h2>
+<ul>
+    <li th:each="status : ${statusOptions}">
+        <p th:text="'Status name: ' + ${status.status}"></p>
+        <form th:action="@{'/projectManagement/' + ${userID} + '/userPage/deleteStatus/' + ${status.statusID}}" method="post">
+            <button type="submit">Delete status</button>
+        </form>
+    </li>
+</ul>
+
+<form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="get">
+    <button type="submit">Create project</button>
+</form>
+<a th:href="@{'/projectManagement'}">
+    <button type="button">Logout</button>
+</a>
 </body>
 </html>
