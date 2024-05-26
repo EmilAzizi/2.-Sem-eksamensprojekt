@@ -1,6 +1,7 @@
 package com.example.eksamensprojekt.controller;
 
 import com.example.eksamensprojekt.model.Project;
+import com.example.eksamensprojekt.model.StatusOption;
 import com.example.eksamensprojekt.model.User;
 import com.example.eksamensprojekt.service.projectService;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -67,13 +69,15 @@ public class projectController {
     }
 
     @GetMapping("{ID}/userPage")
-    public String viewUser(Model model, @PathVariable int ID){
+    public String viewUser(Model model, @PathVariable int ID) throws SQLException {
         User userToView = projectService.findUserByIDFromRepository(ID);
         List<Project> userProjects = userToView.getUsersProjects();
+        List<StatusOption> statusList = projectService.getStatusListFromRepository();
         model.addAttribute("userName", userToView.getUserName());
         model.addAttribute("userToView", userToView);
         model.addAttribute("userProjects", userProjects);
         model.addAttribute("userID", ID);
+        model.addAttribute("statusOptions", statusList);
         return "login";
     }
 
@@ -133,5 +137,21 @@ public class projectController {
         return "redirect:/projectManagement/" + userID + "/userPage";
     }
 
+    @GetMapping("/{userID}/userPage/createStatus/{projectID}")
+    public String createStatus(Model model, @PathVariable int userID, @PathVariable int projectID){
+        StatusOption status = new StatusOption();
+        model.addAttribute("newStatus", status);
+        model.addAttribute("userID", userID);
+        model.addAttribute("projectID", projectID);
 
+        return "createStatus";
+    }
+
+    @PostMapping("/{userID}/userPage/createStatus/{projectID}")
+    public String createStatus(@ModelAttribute StatusOption status, @PathVariable int userID, @PathVariable int projectID) throws SQLException {
+        projectService.createStatusFromRepository(status);
+        return "redirect:/projectManagement/" + userID + "/userPage";
+    }
+
+    // remember to delete a status too!
 }

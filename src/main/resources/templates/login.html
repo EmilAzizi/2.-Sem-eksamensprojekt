@@ -15,13 +15,13 @@
         <form th:action="@{'/projectManagement/' + ${userID} + '/userPage/deleteProject/' + ${projects.getID()}}" method="post">
             <button type="submit">Delete project</button>
         </form>
-            <label for="status">Project Status:</label>
-            <select name="status" id="status">
-                <option value="do">Do</option>
-                <option value="doing">Doing</option>
-                <option value="done">Done</option>
-            </select>
-
+        <label for="status">Project Status:</label>
+        <select name="status" id="status">
+            <option th:each="status : ${statusOptions}" th:value="${status.status}" th:text="${status.status}"></option>
+        </select>
+        <form th:action="@{'/projectManagement/' + ${userID} + '/userPage/createStatus/' + ${projects.getID()}}" method="get">
+            <button type="submit">Create status</button>
+        </form>
     </li>
     <form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="get">
         <button type="submit">Create project</button>

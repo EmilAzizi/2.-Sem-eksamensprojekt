@@ -1,6 +1,7 @@
 package com.example.eksamensprojekt.service;
 
 import com.example.eksamensprojekt.model.Project;
+import com.example.eksamensprojekt.model.StatusOption;
 import com.example.eksamensprojekt.model.User;
 import com.example.eksamensprojekt.repository.projectRepository;
 import org.springframework.stereotype.Service;
@@ -45,5 +46,13 @@ public class projectService {
     }
     public void deleteProjectFromRepository(int userID, int projectID) throws SQLException {
         projectRepository.deleteProject(userID, projectID);
+    }
+
+    public List<StatusOption> getStatusListFromRepository() throws SQLException {
+        return projectRepository.getStatus();
+    }
+
+    public void createStatusFromRepository(StatusOption status) throws SQLException {
+        projectRepository.createStatus(status);
     }
 }

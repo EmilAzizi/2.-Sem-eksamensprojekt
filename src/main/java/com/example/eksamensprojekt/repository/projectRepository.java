@@ -1,5 +1,6 @@
 package com.example.eksamensprojekt.repository;
 import com.example.eksamensprojekt.model.Project;
+import com.example.eksamensprojekt.model.StatusOption;
 import com.example.eksamensprojekt.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +14,7 @@ public class projectRepository {
     Project project;
 
     List<User> userList = new ArrayList<>();
+    List<StatusOption> status = new ArrayList<>();
 
     public projectRepository() {
         user = new User();
@@ -25,6 +27,15 @@ public class projectRepository {
         }
         return userList;
     }
+
+    public List<StatusOption> getStatus() throws SQLException {
+        if(status.isEmpty()){
+            status = getStatuses();
+        }
+        return status;
+    }
+
+
 
     public void insertUser(User newUser) throws SQLException {
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
@@ -142,6 +153,32 @@ public class projectRepository {
             }
         }
         return userFound;
+    }
+
+    public void createStatus(StatusOption newStatus) throws SQLException {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+            // Insert the new project into the database
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO status (statusName) VALUES (?);");
+            ps.setString(1, newStatus.getStatus());
+            ps.executeUpdate();
+            status.add(newStatus);
+        }
+    }
+
+    public List<StatusOption> getStatuses() throws SQLException {
+        List<StatusOption> statusList = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM status");
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                StatusOption status = new StatusOption();
+                status.setStatusID(resultSet.getInt(1));
+                status.setStatus(resultSet.getString(2));
+                statusList.add(status);
+            }
+        }
+        return statusList;
     }
 
     public void createProject(Project projectToBeCreated, int userID) throws SQLException {
