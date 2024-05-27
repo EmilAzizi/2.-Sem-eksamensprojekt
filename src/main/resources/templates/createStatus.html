@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create status</title>
+</head>
+<body>
+<h1>Create a new status for your project</h1>
+<form th:action="@{'/projectManagement/' + ${userID} + '/userPage/createStatus/' + ${projectID}}" th:object="${newStatus}" method="post">
+    <label for="name">Write your status</label>
+    <input type="text" id="name" name="name" required th:field="*{status}">
+    <button type="submit">create</button>
+    <a th:href="@{'/projectManagement' + ${userID} + '/userPage'}">
+        <button type="button">Cancel</button>
+    </a>
+</form>
+</body>
+</html>

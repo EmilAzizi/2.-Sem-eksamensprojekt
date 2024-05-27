@@ -1,7 +1,6 @@
 package com.example.eksamensprojekt.repository;
-
-import com.example.eksamensprojekt.model.Category;
 import com.example.eksamensprojekt.model.Project;
+import com.example.eksamensprojekt.model.StatusOption;
 import com.example.eksamensprojekt.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -13,14 +12,13 @@ import java.util.*;
 public class projectRepository {
     User user;
     Project project;
-    Category category;
 
     List<User> userList = new ArrayList<>();
+    List<StatusOption> status = new ArrayList<>();
 
     public projectRepository() {
         user = new User();
         project = new Project();
-        category = new Category();
     }
 
     public List<User> getUserList() throws SQLException {
@@ -29,6 +27,15 @@ public class projectRepository {
         }
         return userList;
     }
+
+    public List<StatusOption> getStatus() throws SQLException {
+        if(status.isEmpty()){
+            status = getStatuses();
+        }
+        return status;
+    }
+
+
 
     public void insertUser(User newUser) throws SQLException {
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
@@ -51,10 +58,29 @@ public class projectRepository {
                 user.setUserName(resultSet.getString(2));
                 user.setUserPassword(resultSet.getString(3));
                 user.setProjectID(resultSet.getInt(4));
+                user.setUsersProjects(getProjectsForUser(user.getUserID()));
                 userList.add(user);
             }
         }
         return userList;
+    }
+
+    public List<Project> getProjectsForUser(int userID) throws SQLException{
+        List<Project> projects = new ArrayList<>();
+        try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")){
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM project WHERE ownerID = ?");
+            ps.setInt(1, userID);
+            ResultSet resultSet = ps.executeQuery();
+            while(resultSet.next()){
+                Project project = new Project();
+                project.setID(resultSet.getInt("projectID"));
+                project.setName(resultSet.getString("projectName"));
+                project.setDescription(resultSet.getString("projectDescription"));
+                project.setDate(resultSet.getString("projectDate"));
+                projects.add(project);
+            }
+        }
+        return projects;
     }
 
     public void createUser(User newUser) throws SQLException {
@@ -129,35 +155,169 @@ public class projectRepository {
         return userFound;
     }
 
+    public void createStatus(StatusOption newStatus) throws SQLException {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+            // Insert the new project into the database
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO projectStatus (statusName) VALUES (?);");
+            ps.setString(1, newStatus.getStatus());
+            ps.executeUpdate();
+            status.add(newStatus);
+        }
+    }
+
+    public List<StatusOption> getStatuses() throws SQLException {
+        List<StatusOption> statusList = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM projectStatus");
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                StatusOption status = new StatusOption();
+                status.setStatusID(resultSet.getInt(1));
+                status.setStatus(resultSet.getString(2));
+                statusList.add(status);
+            }
+        }
+        return statusList;
+    }
+
     public void createProject(Project projectToBeCreated, int userID) throws SQLException {
         Project newProject = new Project();
         for (User userToFind : userList) {
             if (userToFind.getUserID() == userID) {
                 try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
-                    PreparedStatement ps = connection.prepareStatement("INSERT INTO project (projectName, projectDescription, projectDate)" +
-                            "VALUES(?,?,?);");
+                    // Insert the new project into the database
+                    PreparedStatement ps = connection.prepareStatement(
+                            "INSERT INTO project (projectName, projectDescription, projectDate, ownerID) VALUES (?, ?, ?, ?);",
+                            Statement.RETURN_GENERATED_KEYS
+                    );
                     ps.setString(1, projectToBeCreated.getName());
                     ps.setString(2, projectToBeCreated.getDescription());
                     ps.setString(3, projectToBeCreated.getDate());
+                    ps.setInt(4, userID);  // Set the contributersID to the userID
                     ps.executeUpdate();
 
-                    Statement statement = connection.createStatement();
-                    String SQL = "SELECT * FROM project";
-                    ResultSet resultSet = statement.executeQuery(SQL);
-                    while (resultSet.next()) {
-                        int ID = resultSet.getInt("projectID");
-                        String name = resultSet.getString("projectName");
-                        String description = resultSet.getString("projectDescription");
-                        String date = resultSet.getString("projectDate");
+                    // Get the generated project ID
+                    ResultSet generatedKeys = ps.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        int newProjectID = generatedKeys.getInt(1);
+                        newProject.setID(newProjectID);
 
-                        newProject.setName(name);
-                        newProject.setDate(date);
-                        newProject.setID(ID);
-                        newProject.setDescription(description);
+                        // Set project details
+                        newProject.setName(projectToBeCreated.getName());
+                        newProject.setDescription(projectToBeCreated.getDescription());
+                        newProject.setDate(projectToBeCreated.getDate());
+
+                        // Add the project to the user's project list
+                        userToFind.getUsersProjects().add(newProject);
                     }
-                    user.getUsersProjects().add(newProject);
                 }
             }
         }
     }
+
+    public Project findProjectByID(int userID ,int projectID){
+        Project projectToFind = null;
+
+        for(User user : userList){
+            if(user.getUserID() == userID){
+                for(Project project : user.getUsersProjects()){
+                    if(project.getID() == projectID){
+                        projectToFind = project;
+                    }
+                }
+            }
+        }
+
+        if(!projectToFind.equals(null)){
+            return projectToFind;
+        } else {
+            return null;
+        }
+    }
+
+    public void editProject(Project projectToBeEdited, int userID, int projectID) throws SQLException {
+        Project projectToEdit = null;
+        for(User user : userList) {
+            if(user.getUserID() == userID) {
+                for(Project projectToFind : user.getUsersProjects()) {
+                    if(projectToFind.getID() == projectID) {
+                        projectToEdit = projectToFind;
+                        break; // Found the project, no need to continue loop
+                    }
+                }
+                break; // Found the user, no need to continue loop
+            }
+        }
+
+        if(projectToEdit != null) {
+            // Update project details
+            projectToEdit.setName(projectToBeEdited.getName());
+            projectToEdit.setDescription(projectToBeEdited.getDescription());
+            projectToEdit.setDate(projectToBeEdited.getDate());
+
+            try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+                PreparedStatement statement = connection.prepareStatement(
+                        "UPDATE project SET projectName = ?, projectDescription = ?, projectDate = ? WHERE projectID = ?"
+                );
+                statement.setString(1, projectToEdit.getName());
+                statement.setString(2, projectToEdit.getDescription());
+                statement.setString(3, projectToEdit.getDate());
+                statement.setInt(4, projectID);
+                statement.executeUpdate();
+            }
+        } else {
+            // Handle the case where the project or user is not found
+            throw new SQLException("User or project not found");
+        }
+    }
+
+    public void deleteProject(int userID, int projectID) throws SQLException {
+        Project projectToDelete = null;
+        List<Project> userProjectsToDelete = null;
+
+        // Find the user and the project to delete
+        for (User user : userList) {
+            if (user.getUserID() == userID) {
+                userProjectsToDelete = user.getUsersProjects();
+                for (Project projectToFind : userProjectsToDelete) {
+                    if (projectToFind.getID() == projectID) {
+                        projectToDelete = projectToFind;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
+        // Check if the project and user's project list are not null
+        if (userProjectsToDelete != null && projectToDelete != null) {
+            userProjectsToDelete.remove(projectToDelete);
+
+            // Establish the connection and execute the DELETE statement
+            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM project WHERE projectID = ?;");
+                statement.setInt(1, projectID);
+                statement.executeUpdate();
+            }
+        }
+    }
+
+    public void deleteStatus(int statusID) throws SQLException {
+        StatusOption statusToBeDeleted = null;
+        for(StatusOption status : status){
+            if(status.getStatusID() == statusID){
+                try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+                    PreparedStatement statement = connection.prepareStatement("DELETE FROM projectStatus WHERE statusID = ?;");
+                    statement.setInt(1, statusID);
+                    statusToBeDeleted = status;
+                }
+            }
+        }
+        if(!statusToBeDeleted.equals(null)){
+            status.remove(statusToBeDeleted);
+        }
+    }
+
+
 }

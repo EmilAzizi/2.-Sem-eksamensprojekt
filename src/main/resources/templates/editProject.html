@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create your project</title>
+    <title>Edit project</title>
 </head>
 <body>
-<h1>Create project here!</h1>
-<form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="post" th:object="${projectToBeCreated}">
+<h1>What would you like to change?</h1>
+<form th:action="@{'/projectManagement/' + ${userID} + '/userPage/editProject/' + ${projectID}}" method="post" th:object="${projectToEdit}">
     <p>
         <label>Name:</label>
         <input name="name" type="text" th:field="*{name}">
@@ -20,9 +20,11 @@
         <input name="date" type="text" th:field="*{date}">
     </p>
     <p>
-        <button type="submit">Add project</button>
+        <button type="submit">Save changes</button>
+        <a th:href="@{'/projectManagement/' + ${userID} + '/userPage'}">
+            <button type="button">Cancel</button>
+        </a>
     </p>
-
     <a th:href="@{'/projectManagement/' + ${userID} + '/userPage'}">
         <button type="button">Cancel</button>
     </a>

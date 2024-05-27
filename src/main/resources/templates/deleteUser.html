@@ -15,7 +15,7 @@
 </div>
 
 <form th:action="'/projectManagement/' + ${userID} + '/deleteUser'" method="post" th:object="${userToComparePassword}">
-    <label for="name">Write your user name</label>
+    <label for="name">Write your username</label>
     <input type="text" id="name" name="username" required th:field="*{userName}">
     <label for="password">Write your password</label>
     <input type="text" id="password" name="password" required th:field="*{userPassword}">

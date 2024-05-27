@@ -5,6 +5,7 @@ public class Project {
     String name;
     String description;
     String date;
+    String projectRole;
 
     public Project(){
     }
@@ -39,5 +40,11 @@ public class Project {
 
     public void setID(int ID) {
         this.ID = ID;
+    }
+    public String getProjectRole(){
+        return projectRole;
+    }
+    public void setProjectRole(String role){
+        this.projectRole = role;
     }
 }
