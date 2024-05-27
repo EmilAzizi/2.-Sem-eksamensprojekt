@@ -189,7 +189,6 @@ public class projectRepository {
         for (User userToFind : userList) {
             if (userToFind.getUserID() == userID) {
                 try (Connection connection = DriverManager.getConnection(JDBC_DATABASE_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
-                    // Insert the new project into the database
                     PreparedStatement ps = connection.prepareStatement(
                             "INSERT INTO project (projectName, projectDescription, projectDate, ownerID) VALUES (?, ?, ?, ?);",
                             Statement.RETURN_GENERATED_KEYS
@@ -197,21 +196,18 @@ public class projectRepository {
                     ps.setString(1, projectToBeCreated.getName());
                     ps.setString(2, projectToBeCreated.getDescription());
                     ps.setString(3, projectToBeCreated.getDate());
-                    ps.setInt(4, userID);  // Set the contributersID to the userID
+                    ps.setInt(4, userID);
                     ps.executeUpdate();
 
-                    // Get the generated project ID
                     ResultSet generatedKeys = ps.getGeneratedKeys();
                     if (generatedKeys.next()) {
                         int newProjectID = generatedKeys.getInt(1);
                         newProject.setID(newProjectID);
 
-                        // Set project details
                         newProject.setName(projectToBeCreated.getName());
                         newProject.setDescription(projectToBeCreated.getDescription());
                         newProject.setDate(projectToBeCreated.getDate());
 
-                        // Add the project to the user's project list
                         userToFind.getUsersProjects().add(newProject);
                     }
                 }
@@ -246,15 +242,14 @@ public class projectRepository {
                 for(Project projectToFind : user.getUsersProjects()) {
                     if(projectToFind.getID() == projectID) {
                         projectToEdit = projectToFind;
-                        break; // Found the project, no need to continue loop
+                        break;
                     }
                 }
-                break; // Found the user, no need to continue loop
+                break;
             }
         }
 
         if(projectToEdit != null) {
-            // Update project details
             projectToEdit.setName(projectToBeEdited.getName());
             projectToEdit.setDescription(projectToBeEdited.getDescription());
             projectToEdit.setDate(projectToBeEdited.getDate());
@@ -270,7 +265,6 @@ public class projectRepository {
                 statement.executeUpdate();
             }
         } else {
-            // Handle the case where the project or user is not found
             throw new SQLException("User or project not found");
         }
     }
@@ -279,7 +273,6 @@ public class projectRepository {
         Project projectToDelete = null;
         List<Project> userProjectsToDelete = null;
 
-        // Find the user and the project to delete
         for (User user : userList) {
             if (user.getUserID() == userID) {
                 userProjectsToDelete = user.getUsersProjects();
@@ -293,11 +286,9 @@ public class projectRepository {
             }
         }
 
-        // Check if the project and user's project list are not null
         if (userProjectsToDelete != null && projectToDelete != null) {
             userProjectsToDelete.remove(projectToDelete);
 
-            // Establish the connection and execute the DELETE statement
             try (Connection connection = DriverManager.getConnection(JDBC_DATABASE_URL, JDBC_USERNAME, JDBC_PASSWORD)) {
                 PreparedStatement statement = connection.prepareStatement("DELETE FROM project WHERE projectID = ?;");
                 statement.setInt(1, projectID);
