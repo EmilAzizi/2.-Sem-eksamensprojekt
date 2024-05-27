@@ -3,10 +3,10 @@ package com.example.eksamensprojekt.model;
 import java.util.*;
 
 public class User {
-     int userID = 0;
-     String userName;
-     String userPassword;
-     List<Project> usersProjects;
+     private int userID = 0;
+     private String userName;
+     private String userPassword;
+     private List<Project> usersProjects;
 
      public User(){
          usersProjects = new ArrayList<>();

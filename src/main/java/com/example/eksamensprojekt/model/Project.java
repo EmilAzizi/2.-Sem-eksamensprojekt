@@ -1,11 +1,11 @@
 package com.example.eksamensprojekt.model;
 
 public class Project {
-    int ID = 0;
-    String name;
-    String description;
-    String date;
-    String projectRole;
+    private int ID = 0;
+    private String name;
+    private String description;
+    private String date;
+    private String projectRole;
 
     public Project(){
     }

@@ -13,11 +13,14 @@ CREATE TABLE IF NOT EXISTS project (
     projectName varchar(255),
     projectDate varchar(255),
     projectDescription varchar(255),
-    labelID INT,
     ownerID INT
     );
 
--- Add the foreign key constraint to the project table
+CREATE TABLE IF NOT EXISTS projectStatus(
+    statusID INT AUTO_INCREMENT PRIMARY KEY,
+    statusName varchar(255)
+    );
+
 ALTER TABLE users
     ADD CONSTRAINT fk_projectID
     FOREIGN KEY (projectID) REFERENCES project(projectID);

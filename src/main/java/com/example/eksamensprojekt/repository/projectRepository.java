@@ -10,11 +10,11 @@ import java.util.*;
 
 @Repository
 public class projectRepository {
-    User user;
-    Project project;
+    private User user;
+    private  Project project;
 
-    List<User> userList = new ArrayList<>();
-    List<StatusOption> status = new ArrayList<>();
+    private  List<User> userList = new ArrayList<>();
+    private List<StatusOption> status = new ArrayList<>();
 
     public projectRepository() {
         user = new User();
@@ -103,18 +103,17 @@ public class projectRepository {
             }
         }
         userList.add(userToBeCreated);
-        for (User user : userList) {
-            System.out.println(user.toString());
-        }
     }
 
     public Boolean authenticateUser(User userToBeComparedTo, int ID) throws SQLException {
         boolean isAuthenticated = false;
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
             for (User user : userList) {
-                if (userToBeComparedTo.getUserName().equals(user.getUserName())
-                        && userToBeComparedTo.getUserPassword().equals(user.getUserPassword())) {
-                    isAuthenticated = true;
+                if(user.getUserID() == ID) {
+                    if (userToBeComparedTo.getUserName().equals(user.getUserName())
+                            && userToBeComparedTo.getUserPassword().equals(user.getUserPassword())) {
+                        isAuthenticated = true;
+                    }
                 }
             }
             return isAuthenticated;

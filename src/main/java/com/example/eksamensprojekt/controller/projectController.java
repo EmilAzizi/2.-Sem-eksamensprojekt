@@ -15,22 +15,12 @@ import java.util.List;
 @Controller
 @RequestMapping("projectManagement")
 public class projectController {
-    projectService projectService = new projectService();
+    private final projectService projectService = new projectService();
 
     @GetMapping("")
     public String start(Model model) throws SQLException {
         model.addAttribute("userList", projectService.getUserList());
         return "startPage";
-    }
-
-    @GetMapping("/project")
-    public String projectSelectionPage(Model model) {
-        return "projectSelectionPage";
-    }
-
-    @GetMapping("/projectmain")
-    public String projectMainPAge(Model model) {
-        return "projectMainPage";
     }
 
     @GetMapping("/createUser")
