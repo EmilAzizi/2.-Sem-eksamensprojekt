@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Opret status</title>
+    <link rel="stylesheet" href="/css/createStatus.css">
+</head>
+<body>
+<h1>Opret en ny status for dit projekt</h1>
+<form th:action="@{'/projectManagement/' + ${userID} + '/userPage/createStatus/' + ${projectID}}" th:object="${newStatus}" method="post">
+    <label for="name">Status: </label>
+    <input type="text" id="name" name="name" required th:field="*{status}">
+    <button type="submit">Opret</button>
+    <a th:href="@{'/projectManagement' + ${userID} + '/userPage'}">
+        <button type="button">Afbryd</button>
+    </a>
+</form>
+</body>
+</html>

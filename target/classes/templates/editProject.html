@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rediger projekt</title>
+    <link rel="stylesheet" href="/css/editProject.css">
+</head>
+<body>
+<h1>Hvad vil du gerne ændre?</h1>
+<form th:action="@{'/projectManagement/' + ${userID} + '/userPage/editProject/' + ${projectID}}" method="post" th:object="${projectToEdit}">
+    <p>
+        <label>Navn:</label>
+        <input name="name" type="text" th:field="*{name}">
+    </p>
+    <p>
+        <label>Beskrivelse:</label>
+        <input name="description" type="text" th:field="*{description}">
+    </p>
+    <p>
+        <label>Dato:</label>
+        <input name="date" type="text" th:field="*{date}">
+    </p>
+    <p>
+        <button type="submit">Gem ændringer</button>
+        <a th:href="@{'/projectManagement/' + ${userID} + '/userPage'}">
+            <button type="button">Afbryd</button>
+        </a>
+    </p>
+    <a th:href="@{'/projectManagement/' + ${userID} + '/userPage'}">
+        <button type="button">Afbryd</button>
+    </a>
+</form>
+</body>
+</html>
