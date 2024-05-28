@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link rel="stylesheet" href="/css/startPage.css">
 </head>
 <body>
-<h1>Welcome to the your project management startpage</h1>
-
+<h1>Velkommen til dit projektkalkuleringsværktøj</h1>
 
 <ul>
 <li th:each="user : ${userList}">
@@ -16,7 +16,7 @@
     <button type="submit">Login</button>
   </form>
   <a th:href="@{'/projectManagement/' + ${user.getUserID()} + '/deleteUser'}">
-  <button type="button" class="deleteButton">Delete user</button>
+  <button type="button" class="deleteButton">Slet bruger</button>
   </a>
 </li>
 </ul>
@@ -24,7 +24,7 @@
 
 
 <a th:href="@{'/projectManagement/createUser'}">
-  <button class="createButton" type="button">Create user</button>
+  <button class="createButton" type="button">Opret bruger</button>
 </a>
 
 

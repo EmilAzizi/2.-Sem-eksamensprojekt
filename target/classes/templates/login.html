@@ -3,41 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>User Page</title>
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
-<h1 th:text="'Welcome ' + ${userName}"></h1>
+<h1 th:text="'Velkommen ' + ${userName}"></h1>
 <ul>
     <li th:each="projects : ${userProjects}">
-        <p th:text="'Name: ' + ${projects.getName()}"></p>
-        <p th:text="'Description: ' + ${projects.getDescription()}"></p>
+        <p th:text="'Navn: ' + ${projects.getName()}"></p>
+        <p th:text="'Beskrivelse: ' + ${projects.getDescription()}"></p>
         <form th:action="@{'/projectManagement/' + ${userID} + '/userPage/editProject/' + ${projects.getID()}}">
-            <button type="submit">Edit project</button>
+            <button type="submit">Rediger projekt</button>
         </form>
         <form th:action="@{'/projectManagement/' + ${userID} + '/userPage/deleteProject/' + ${projects.getID()}}" method="post">
-            <button type="submit">Delete project</button>
+            <button type="submit">Slet projekt</button>
         </form>
-        <label for="status">Project Status:</label>
+        <label for="status">Projekt status:</label>
         <select name="status" id="status">
             <option th:each="status : ${statusOptions}" th:value="${status.status}" th:text="${status.status}"></option>
         </select>
         <form th:action="@{'/projectManagement/' + ${userID} + '/userPage/createStatus/' + ${projects.getID()}}" method="get">
-            <button type="submit">Create status</button>
+            <button type="submit">Opret ny status</button>
         </form>
     </li>
 </ul>
 
-<h2>Manage Statuses</h2>
+<h2>Håndter statuser</h2>
 <ul>
     <li th:each="status : ${statusOptions}">
-        <p th:text="'Status name: ' + ${status.status}"></p>
+        <p th:text="'Status: ' + ${status.status}"></p>
         <form th:action="@{'/projectManagement/' + ${userID} + '/userPage/deleteStatus/' + ${status.statusID}}" method="post">
-            <button type="submit">Delete status</button>
+            <button type="submit">Slet status</button>
         </form>
     </li>
 </ul>
 
 <form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="get">
-    <button type="submit">Create project</button>
+    <button type="submit">Opret projekt</button>
 </form>
 <a th:href="@{'/projectManagement'}">
     <button type="button">Logout</button>

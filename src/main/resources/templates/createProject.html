@@ -2,29 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create your project</title>
+    <title>Opret projekt</title>
+    <link rel="stylesheet" href="/css/deleteUser.css">
 </head>
 <body>
-<h1>Create project here!</h1>
+<h1>Opret ny projekt</h1>
 <form th:action="@{'/projectManagement/' + ${userID} + '/userLogin/createProject'}" method="post" th:object="${projectToBeCreated}">
     <p>
-        <label>Name:</label>
+        <label>Navn:</label>
         <input name="name" type="text" th:field="*{name}">
     </p>
     <p>
-        <label>Description:</label>
+        <label>Beskrivelse:</label>
         <input name="description" type="text" th:field="*{description}">
     </p>
     <p>
-        <label>Date:</label>
+        <label>Dato:</label>
         <input name="date" type="text" th:field="*{date}">
     </p>
     <p>
-        <button type="submit">Add project</button>
+        <button type="submit">Tilføj projekt</button>
     </p>
 
     <a th:href="@{'/projectManagement/' + ${userID} + '/userPage'}">
-        <button type="button">Cancel</button>
+        <button type="button">Afbryd</button>
     </a>
 </form>
 </body>

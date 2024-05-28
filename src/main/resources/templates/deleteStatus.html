@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Delete status</title>
+    <title>Slet status</title>
 </head>
 <body>
 <ul>
   <li th:each="status : ${projectStatuses}">
     <p th:text="'status name: ' + ${status.getStatus()}"></p>
     <a th:href="@{'/projectManagement/' + ${userID} + '/userPage/' + ${statusID}}">
-      <button type="button" class="deleteButton">Delete status</button>
+      <button type="button" class="deleteButton">Slet status</button>
     </a>
   </li>
 </ul>

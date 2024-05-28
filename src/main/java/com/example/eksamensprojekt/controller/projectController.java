@@ -85,7 +85,7 @@ public class projectController {
     public String deleteUser (@ModelAttribute User userToCompare, Model model, @PathVariable int ID) throws SQLException {
         boolean isDeleted = projectService.deleteUser(userToCompare, ID);
         if (!isDeleted) {
-            model.addAttribute("errorMessage", "Wrong password, the user was not deleted.");
+            model.addAttribute("errorMessage", "Forkert brugernavn eller kodeord. Prøv igen");
             model.addAttribute("userToComparePassword", new User());
             return "deleteUser";
         }
