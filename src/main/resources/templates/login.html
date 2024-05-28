@@ -11,6 +11,7 @@
     <li th:each="projects : ${userProjects}">
         <p th:text="'Navn: ' + ${projects.getName()}"></p>
         <p th:text="'Beskrivelse: ' + ${projects.getDescription()}"></p>
+        <p th:text="'Dato: ' + ${projects.getDate()}"></p>
         <form th:action="@{'/projectManagement/' + ${userID} + '/userPage/editProject/' + ${projects.getID()}}">
             <button type="submit">Rediger projekt</button>
         </form>
