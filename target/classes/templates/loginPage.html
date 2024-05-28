@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="login-container">
-  <form th:action="'/projectManagement/' + ${userID} + '/userLogin'" method="get" class="login-form" th:object="${userToBeCompared}">
+  <form th:action="'/projectManagement/' + ${userID} + '/userLogin'" method="post" class="login-form" th:object="${userToBeCompared}">
 
     <h2>Login</h2>
     <p th:if="${loginError}" th:text="${errorMessage}"></p>
