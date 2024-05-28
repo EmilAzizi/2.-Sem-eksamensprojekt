@@ -43,7 +43,3 @@ Projektkalkuleringsværktøjet er et webbaseret system, der hjælper med at admi
 ## Bidrag
 
 Se `CONTRIBUTING.md` for detaljer om, hvordan du kan bidrage til projektet.
-
-## Licens
-
-Dette projekt er licenseret under MIT-licensen - se `LICENSE.md` for flere detaljer.
