@@ -2,6 +2,7 @@ package com.example.eksamensprojekt.repository;
 import com.example.eksamensprojekt.model.Project;
 import com.example.eksamensprojekt.model.StatusOption;
 import com.example.eksamensprojekt.model.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
