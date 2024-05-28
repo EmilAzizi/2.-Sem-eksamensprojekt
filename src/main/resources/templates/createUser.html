@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>createUser</title>
+    <link rel="stylesheet" href="/css/createUser.css">
 </head>
 <body>
-<h1>Create your user</h1>
+<h1>Opret din bruger</h1>
 <form action="/projectManagement/createUser" method="post" th:object="${newUser}">
-    <label for="name">Write your username</label>
+    <label for="name">Skriv dit brugernavn</label>
     <input type="text" id="name" name="name" required th:field="*{userName}">
-    <label for="password">Write your password</label>
+    <label for="password">Skriv dit kodeord</label>
     <input type="text" id="password" name="password" required th:field="*{userPassword}">
-    <button type="submit">create</button>
+    <button type="submit">Opret</button>
     <a th:href="@{'/projectManagement'}">
-        <button type="button">Cancel</button>
+        <button type="button">Afbryd</button>
     </a>
 </form>
 </body>

@@ -3,30 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Delete user</title>
-    <link rel="stylesheet" href="@{/login.css}">
+    <link rel="stylesheet" href="/css/deleteUser.css">
 </head>
 <body>
 
 
 
-
+<h1>Skriv venligst dit brugernavn og kodeord for at slette din bruger</h1>
 <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
     <p th:text="${errorMessage}"></p>
 </div>
 
 <form th:action="'/projectManagement/' + ${userID} + '/deleteUser'" method="post" th:object="${userToComparePassword}">
-    <label for="name">Write your username</label>
+    <label for="name">Brugernavn:</label>
     <input type="text" id="name" name="username" required th:field="*{userName}">
-    <label for="password">Write your password</label>
+    <label for="password">Kodeord:</label>
     <input type="text" id="password" name="password" required th:field="*{userPassword}">
-    <button type="submit">Delete</button>
+    <button type="submit">Slet</button>
 </form>
-
-
-
-
-
-
-
 </body>
 </html>
