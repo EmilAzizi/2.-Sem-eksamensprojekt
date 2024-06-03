@@ -38,7 +38,7 @@ public class projectRepository {
 
 
     public void insertUser(User newUser) throws SQLException {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO users (userName, userPassword)" +
                     "VALUES(?,?);");
             ps.setString(1, newUser.getUserName());
@@ -49,7 +49,7 @@ public class projectRepository {
 
     public List<User> getUsers() throws SQLException {
         List<User> userList = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM users");
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
@@ -67,7 +67,7 @@ public class projectRepository {
 
     public List<Project> getProjectsForUser(int userID) throws SQLException{
         List<Project> projects = new ArrayList<>();
-        try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")){
+        try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")){
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM project WHERE ownerID = ?");
             ps.setInt(1, userID);
             ResultSet resultSet = ps.executeQuery();
@@ -86,7 +86,7 @@ public class projectRepository {
     public void createUser(User newUser) throws SQLException {
         insertUser(newUser);
         User userToBeCreated = newUser;
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
             Statement statement = connection.createStatement();
             String selectSQL = "SELECT * FROM users";
             ResultSet resultSet = statement.executeQuery(selectSQL);
@@ -110,7 +110,7 @@ public class projectRepository {
 
     public Boolean authenticateUser(User userToBeComparedTo, int ID) throws SQLException {
         boolean isAuthenticated = false;
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
             for (User user : userList) {
                 if (userToBeComparedTo.getUserName().equals(user.getUserName())
                         && userToBeComparedTo.getUserPassword().equals(user.getUserPassword())) {
@@ -126,7 +126,7 @@ public class projectRepository {
         for (User userToBeComparedWith : userList) {
             if (userToBeComparedWith.getUserID() == ID) {
                 if (userToCompare.getUserName().equals(userToBeComparedWith.getUserName()) && userToCompare.getUserPassword().equals(userToBeComparedWith.getUserPassword())) {
-                    try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+                    try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
                         PreparedStatement ps = connection.prepareStatement("DELETE FROM users WHERE userPassword = ? AND userName = ?;");
                         ps.setString(1, userToCompare.getUserPassword());
                         ps.setString(2, userToCompare.getUserName());
@@ -156,7 +156,7 @@ public class projectRepository {
     }
 
     public void createStatus(StatusOption newStatus) throws SQLException {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
             // Insert the new project into the database
             PreparedStatement ps = connection.prepareStatement(
                     "INSERT INTO projectStatus (statusName) VALUES (?);");
@@ -168,7 +168,7 @@ public class projectRepository {
 
     public List<StatusOption> getStatuses() throws SQLException {
         List<StatusOption> statusList = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM projectStatus");
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
@@ -185,7 +185,7 @@ public class projectRepository {
         Project newProject = new Project();
         for (User userToFind : userList) {
             if (userToFind.getUserID() == userID) {
-                try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+                try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
                     // Insert the new project into the database
                     PreparedStatement ps = connection.prepareStatement(
                             "INSERT INTO project (projectName, projectDescription, projectDate, ownerID) VALUES (?, ?, ?, ?);",
@@ -256,7 +256,7 @@ public class projectRepository {
             projectToEdit.setDescription(projectToBeEdited.getDescription());
             projectToEdit.setDate(projectToBeEdited.getDate());
 
-            try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+            try(Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
                 PreparedStatement statement = connection.prepareStatement(
                         "UPDATE project SET projectName = ?, projectDescription = ?, projectDate = ? WHERE projectID = ?"
                 );
@@ -295,7 +295,7 @@ public class projectRepository {
             userProjectsToDelete.remove(projectToDelete);
 
             // Establish the connection and execute the DELETE statement
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
                 PreparedStatement statement = connection.prepareStatement("DELETE FROM project WHERE projectID = ?;");
                 statement.setInt(1, projectID);
                 statement.executeUpdate();
@@ -307,7 +307,7 @@ public class projectRepository {
         StatusOption statusToBeDeleted = null;
         for(StatusOption status : status){
             if(status.getStatusID() == statusID){
-                try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "Emperiusvalor1!")) {
+                try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
                     PreparedStatement statement = connection.prepareStatement("DELETE FROM projectStatus WHERE statusID = ?;");
                     statement.setInt(1, statusID);
                     statusToBeDeleted = status;
