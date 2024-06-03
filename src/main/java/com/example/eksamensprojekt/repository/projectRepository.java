@@ -31,7 +31,7 @@ public class projectRepository {
     }
 
     public void insertUser(User newUser) throws SQLException {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "As3146594250")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO users (userName, userPassword)" +
                     "VALUES(?,?);");
             ps.setString(1, newUser.getUserName());
@@ -42,7 +42,7 @@ public class projectRepository {
 
     public List<User> getUsers() throws SQLException {
         List<User> userList = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "As3146594250")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM users");
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
@@ -60,7 +60,7 @@ public class projectRepository {
     public void createUser(User newUser) throws SQLException {
         insertUser(newUser);
         User userToBeCreated = newUser;
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "As3146594250")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
             Statement statement = connection.createStatement();
             String selectSQL = "SELECT * FROM users";
             ResultSet resultSet = statement.executeQuery(selectSQL);
@@ -84,7 +84,7 @@ public class projectRepository {
 
     public Boolean authenticateUser(User userToBeComparedTo, int ID) throws SQLException {
         boolean isAuthenticated = false;
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "As3146594250")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
             for (User user : userList) {
                 if (userToBeComparedTo.getUserName().equals(user.getUserName())
                         && userToBeComparedTo.getUserPassword().equals(user.getUserPassword())) {
@@ -100,7 +100,7 @@ public class projectRepository {
         for (User userToBeComparedWith : userList) {
             if (userToBeComparedWith.getUserID() == ID) {
                 if (userToCompare.getUserName().equals(userToBeComparedWith.getUserName()) && userToCompare.getUserPassword().equals(userToBeComparedWith.getUserPassword())) {
-                    try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "As3146594250")) {
+                    try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
                         PreparedStatement ps = connection.prepareStatement("DELETE FROM users WHERE userPassword = ? AND userName = ?;");
                         ps.setString(1, userToCompare.getUserPassword());
                         ps.setString(2, userToCompare.getUserName());
@@ -133,7 +133,7 @@ public class projectRepository {
         Project newProject = new Project();
         for (User userToFind : userList) {
             if (userToFind.getUserID() == userID) {
-                try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "As3146594250")) {
+                try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/projectmanagement", "root", "")) {
                     PreparedStatement ps = connection.prepareStatement("INSERT INTO project (projectName, projectDescription, projectDate)" +
                             "VALUES(?,?,?);");
                     ps.setString(1, projectToBeCreated.getName());
@@ -170,7 +170,7 @@ public class projectRepository {
                 List<Project> projectList = userWithProjectToEdit.getUsersProjects();
                   for(Project projectToBeEdited : projectList) {
                     if (projectToBeEdited.getID() == projectID) {
-                       try(Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/wishes","root", "Emperiusvalor1!")) {
+                       try(Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/wishes","root", "")) {
 
                            String tableName = "";
                         if (projectToEdit.getName().contains(" ")) {
